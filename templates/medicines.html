@@ -218,11 +218,9 @@
         function initiateSearch()
         {
             searchKey = [{"queried": ""+query}];
-            var temp = JSON.stringify(searchKey)
-            //alert(temp)
+            var temp = JSON.stringify(searchKey);
             $.post("/searchHandler", temp, function(){});
-            //event.preventDefault();
-            window.open("/searchResults");
+            window.location("/searchResults");
         }
 
         medList = {{ medList|tojson }}
@@ -237,17 +235,18 @@
                 a1.appendChild(linkText1);
                 a1.title = med[1];
                 a1.appendChild(document.createTextNode("ID: "+med[0]+"\n"));
-                a1.appendChild(document.createTextNode("type: "+med[2]+"\n"));
-                a1.appendChild(document.createTextNode("Price: $"+med[3]+"\n"));
-                a1.appendChild(document.createTextNode("Quantity: "+med[4]+"\n"));
-                a1.appendChild(document.createTextNode("Expiry Date: "+med[5]+"\n"));
-                a1.appendChild(document.createTextNode("Location: Shelf-"+med[6]+"\n\n"));
+                a1.appendChild(document.createTextNode("Type: "+med[2]+"\n"));
+                a1.appendChild(document.createTextNode("Brand: "+med[3]+"\n"));
+                a1.appendChild(document.createTextNode("Price: $"+med[4]+"\n"));
+                a1.appendChild(document.createTextNode("Quantity: "+med[5]+"\n"));
+                a1.appendChild(document.createTextNode("Expiry Date: "+med[6]+"\n"));
+                a1.appendChild(document.createTextNode("Location: Shelf-"+med[7]+"\n\n"));
                 a1.style="color: black; text-decoration: none; font-family: 'Ubuntu'";
                 var a2 = document.createElement('img');
-                a2.src=med[7];
+                a2.src=med[8];
                 a2.height=180;
                 a2.width=200;
-                a2.style="position: absolute; right: 10%; top:"+(3+(i*53))+"%";
+                a2.style="position: absolute; right: 10%; margin-top: -23%";
                 a2.appendChild(document.createTextNode("\n\n"));
                 a1.appendChild(a2);
                 document.getElementById("listbox").appendChild(a1);
@@ -340,9 +339,13 @@
         Sell Medicine
     </button>
 
+    <button class="submitButton" style="right: 15%" onclick="window.location='/medicineListModify'">
+        Add/Remove
+    </button>
+
 
     <div id="listbox" style="white-space: pre-line; position: fixed; top: 24%; left: 17%;
-     height: 70%; width: 80%; font-size: 150%; font-family: 'Ubuntu Light'; overflow: auto">
+     height: 70%; width: 80%; font-size: 150%; font-family: 'Ubuntu Light'; overflow: auto;">
     </div>
 
 </body>

@@ -34,66 +34,53 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <script type="text/javascript">
-        accountList = {{ accountList|tojson }}
+
+        response = {{ response|tojson }}
 
 
-        // id, username, password, full name, usertype
+        function onLoad()
+        {
+            if(response=="None");
+            else if(response=="OK")openHomePage();
+            else
+                alert(response);
+        };
+
+
+        function openHomePage()
+        {
+            window.location = "/home";
+        }
+
 
         function signIn()
         {
             var username=document.getElementById("username").value;
             var pass=document.getElementById("password").value;
-            var isValid=false;
-            if(username=="")alert("Please enter username.");
-            else if(pass.value=="")alert("Please enter password.");
-            else
-            {
-                for(var i=0;i<accountList.length;i++)
-                {
-                     var temp=accountList[i].split("#");
-                     if(username==temp[1] && pass==temp[2])
-                     {
-                         location.assign("/home");
-                         currentUser = [{"current": ""+username}];
-                         var userType = [{"current": ""+temp[4]}];
-                         var temp = JSON.stringify(currentUser);
-                         $.post("/updateUser", temp, function(){});
-                         temp = JSON.stringify(userType);
-                         $.post("/updateUserType", temp, function(){});
-                         isValid=true;
-                         break;
-                     }
-                     else if(username==temp[1])
-                     {
-                         isValid=false;
-                     }
-                     else if(username!=temp[1] || pass!=temp[2])
-                     {
-                         isValid=false;
-                     }
-                }
-                document.getElementById("username").value="";
-                document.getElementById("password").value="";
-                if(!isValid)alert("Wrong username/password");
-            }
+            user = [{"userpass": ""+username+"#"+pass}];
+            var temp = JSON.stringify(user);
+            $.post("/authCheck", temp, function(){});
+            //alert(msg);
         }
     </script>
 </head>
-<body background="/static/Images/bg.jpg">
+<body background="/static/Images/bg.jpg" onload="onLoad()">
     <div style="background: whitesmoke;position: fixed;top: 18%;height: 70%;left: 30%;
             width: 40%;box-shadow: 2px 2px dimgrey; border: 2px solid black">
         <p style="font-family: 'Ubuntu Light'; font-size: 350%; text-align: center;">
             Sign In
         </p>
-        <input id="username" type="text" placeholder=" Enter username/e-mail address..."
-               style="position: fixed; top: 45%; left: 33%; width: 34.2%;
-                font-size: 150%; font-family: 'Ubuntu Light'; border: 1px solid black">
-        <input id="password" type="password" placeholder=" Enter password..."
-               style="position: fixed; top: 53%; left: 33%; width: 34.2%;
-                font-size: 150%; font-family: 'Ubuntu Light'; border: 1px solid black">
-        <button class="submit" onclick="signIn()">
-            Submit
-        </button>
+        <form>
+            <input id="username" type="text" placeholder=" Enter username/e-mail address..."
+                   style="position: fixed; top: 45%; left: 33%; width: 34.2%;
+                    font-size: 150%; font-family: 'Ubuntu Light'; border: 1px solid black" required>
+            <input id="password" type="password" placeholder=" Enter password..."
+                   style="position: fixed; top: 53%; left: 33%; width: 34.2%;
+                    font-size: 150%; font-family: 'Ubuntu Light'; border: 1px solid black" required>
+            <button type="submit" class="submit" onclick="signIn()">
+                Submit
+            </button>
+        </form>
     </div>
 </body>
 </html>

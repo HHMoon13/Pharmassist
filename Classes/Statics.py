@@ -16,3 +16,4 @@ medorder = ["01#001#v001#Square#Ace#65#01-01-2020#true#975",
 
 currentUser="NOUSER"
 currentUserType="NONE"
+authMessage="None"

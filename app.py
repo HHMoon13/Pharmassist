@@ -14,12 +14,8 @@ app = Flask(__name__)
 
 @app.route('/')
 def startupPage():
-    accountList=[]
-    a = Iterator.Iterator
-    a = ada.AccessDatabaseAccounts().getIterator()
-    while a.hasNext():
-        accountList.append(a.next())
-    return render_template('signInPage.html', accountList=accountList)
+    response=Statics.authMessage
+    return render_template('signInPage.html', response=response)
 
 @app.route('/home')
 def homepage():
@@ -146,20 +142,45 @@ def medChange():
         a.update(temp2[1], temp2[2], temp2[3])
 
 
-@app.route('/updateUser', methods=['POST'])
+@app.route('/authCheck', methods=['POST'])
 def update():
+    Statics.currentUser = ""
     currentUser = request.get_json(force=True)
-    Statics.currentUser=""
+    temp=""
     for i in currentUser:
-        Statics.currentUser+=str(i['current'])
+        temp+=str(i['userpass'])
+    b = temp.split("#")
+    username=b[0]
+    password=b[1]
+    userList = []
+    a = Iterator.Iterator
+    a = ada.AccessDatabaseAccounts().getIterator()
+    while a.hasNext():
+        userList.append(a.next())
 
-@app.route('/updateUserType', methods=['POST'])
-def updateType():
-    currentUserType = request.get_json(force=True)
-    Statics.currentUserType=""
-    for i in currentUserType:
-        Statics.currentUserType+=str(i['current'])
+    isValid=False
 
+    #id, username, password, fullname, usertype
+
+    for i in userList:
+        temp2 = i.split("#")
+        if temp2[1]==username and temp2[2]==password:
+            Statics.authMessage="OK"
+            Statics.currentUser=username
+            Statics.currentUserType=temp2[4]
+            isValid=True
+            break
+        if temp2[1]==username and temp2[2]!=password:
+            Statics.authMessage="Wrong Password"
+            isValid=True
+            break
+
+    if isValid==False:
+        Statics.authMessage="Wrong Username"
+
+    response=Statics.authMessage
+    print(response)
+    return render_template('signInPage.html', response=response)
 
 #
 @app.route('/orders')
