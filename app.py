@@ -197,8 +197,9 @@ def receipt():
 
 @app.route('/testing')
 def testpage():
-    test=Statics.currentReceipt
-    return render_template('newFeature.html',test=test)
+    #test=Statics.currentReceipt
+    # return render_template('newFeature.html',test=test)
+    return render_template('newFeature.html')
 
 
 
