@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>Medicines</title>
+    <style>
+        .searchbox
+        {
+            background: white;
+            color: black;
+            font-family: "Ubuntu Light";
+            font-size: 150%;
+            border-radius: 5%;
+            border-width: 3px;
+            border-color: black;
+        }
+
+        .submitButton
+        {
+            position:fixed;
+            bottom: 15%;
+            left: 45%;
+            width: 10%;
+            height: 6%;
+            background: white;
+            border: solid black;
+            border-width: 2px;
+            border-radius: 1px;
+            font-family: "Ubuntu Light";
+            color: black;
+            font-size: 150%;
+        }
+
+        .submitButton:hover
+        {
+            position:fixed;
+            bottom: 15%;
+            left: 45%;
+            width: 10%;
+            height: 6%;
+            background: black;
+            border: solid white;
+            border-width: 2px;
+            border-radius: 1px;
+            font-family: "Ubuntu Light";
+            color: white;
+            font-size: 150%;
+        }
+
+        .options
+        {
+            background: white;
+            color: black;
+            text-align: center;
+            height: 8%;
+            width: 15%;
+        }
+
+        .options:hover
+        {
+            background: black;
+            color: white;
+            text-align: center;
+            height: 8%;
+            width: 15%;
+        }
+
+        .expand
+        {
+            position: fixed;
+            top: 0%;
+            left:0%;
+            width: 15%;
+            height: 100%;
+            background-color: white;
+            color: black;
+            border: solid black;
+            border-width: 2px;
+            border-bottom-right-radius: 2%;
+            border-top-right-radius: 2%;
+            animation-duration: 0.5s;
+            animation-name: expandAnim;
+        }
+
+        .collapse
+        {
+            position: fixed;
+            top: 0%;
+            left:-20%;
+            width: 15%;
+            height: 100%;
+            background-color: white;
+            color: black;
+            border: solid black;
+            border-width: 2px;
+            border-bottom-right-radius: 2%;
+            border-top-right-radius: 2%;
+            animation-duration: 0.5s;
+            animation-name: collapseAnim;
+        }
+
+        @keyframes expandAnim
+        {
+            0% { left: -20%; }
+            100% { left: 0%; }
+        }
+
+        @keyframes collapseAnim
+        {
+            0% { left: 0%; }
+            100% { left: -20%; }
+        }
+
+        @keyframes expandButtonAnim
+        {
+            0% { left: 0%; }
+            100% { left: 12%; }
+        }
+
+        @keyframes collapseButtonAnim
+        {
+            0% { left: 12%; }
+            100% { left: 0%; }
+        }
+
+        ::-webkit-scrollbar
+        {
+            width: 1.1%;
+        }
+        ::-webkit-scrollbar-track
+        {
+            background: lightgray;
+        }
+        ::-webkit-scrollbar-thumb
+        {
+            background: black;
+        }
+        ::-webkit-scrollbar-thumb:hover
+        {
+            background: black;
+        }
+
+
+    </style>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script type="text/javascript">
+        var counter=0;
+        function collapse()
+        {
+            counter++;
+            if(counter%2==1)
+            {
+                document.getElementById("clps").src="/static/Images/collapsed.png";
+                document.getElementById("clps").style="position: fixed; top: 0%; left: 12%; width: 3%; height: 7%; background:transparent; border-color: transparent; animation-name: expandButtonAnim; animation-duration: 0.5s";
+                document.getElementById("bar").style="visibility: visible";
+                document.getElementById("bar").className="expand";
+                document.getElementById("menu").style="color: black; font-family: 'Ubuntu Light'; font-size: 150%; position: fixed; top: -3%; left: 0.5%; animation: inherit";
+                document.getElementById("menusearch").style="position: fixed; top: 8%; left: 0.2%; width: 14.4%; font-size: 100%; height: 5%;animation: inherit";
+                document.getElementById("menuSearchSubmit").style="position: fixed; top: 8.2%; left: 11.5%; animation: inherit; background: transparent; border-color: transparent; outline: none; animation-duration: 0.3s";
+                document.getElementById("option1").style="text-decoration: none; font-family: 'Ubuntu Light'; font-size: 120%; position: fixed; top: 17%; padding-top: 0.7%; animation: inherit";
+                document.getElementById("option2").style="text-decoration: none; font-family: 'Ubuntu Light'; font-size: 120%; position: fixed; top: 25%; padding-top: 0.7%; animation: inherit";
+                document.getElementById("option3").style="text-decoration: none; font-family: 'Ubuntu Light'; font-size: 120%; position: fixed; top: 33%; padding-top: 0.7%; animation: inherit";
+                document.getElementById("option4").style="text-decoration: none; font-family: 'Ubuntu Light'; font-size: 120%; position: fixed; top: 41%; padding-top: 0.7%; animation: inherit";
+                document.getElementById("option5").style="text-decoration: none; font-family: 'Ubuntu Light'; font-size: 120%; position: fixed; top: 49%; padding-top: 0.7%; animation: inherit";
+                document.getElementById("option6").style="text-decoration: none; font-family: 'Ubuntu Light'; font-size: 120%; position: fixed; top: 57%; padding-top: 0.7%; animation: inherit";
+                document.getElementById("option7").style="text-decoration: none; font-family: 'Ubuntu Light'; font-size: 120%; position: fixed; top: 65%; padding-top: 0.7%; animation: inherit";
+                document.getElementById("option8").style="text-decoration: none; font-family: 'Ubuntu Light'; font-size: 120%; position: fixed; top: 73%; padding-top: 0.7%; animation: inherit";
+            }
+            else
+            {
+                document.getElementById("clps").src="/static/Images/collapsible.png";
+                document.getElementById("clps").style="position: fixed; top: 0%; left: 0%; width: 3%; height: 7%; background:transparent; border-color: transparent; animation-name: collapseButtonAnim; animation-duration: 0.5s";
+                document.getElementById("bar").className="collapse";
+                document.getElementById("menu").style="color: black; font-family: 'Ubuntu Light'; font-size: 150%; position: fixed; top: -3%; left: -15%; animation: inherit";
+                document.getElementById("menusearch").style="position: fixed; top: 8%; left: -16%; width: 14.4%; font-size: 100%; height: 5%;animation: inherit";
+                document.getElementById("menuSearchSubmit").style="position: fixed; top: 8%; left: -15%; animation: inherit; background: transparent; border-color: transparent; animation-duration: 0.3s";
+                document.getElementById("option1").style="text-decoration: none; font-family: 'Ubuntu Light'; font-size: 120%; color: black; position: fixed; top: 17%; left: -15%;animation: inherit";
+                document.getElementById("option2").style="text-decoration: none; font-family: 'Ubuntu Light'; font-size: 120%; color: black; position: fixed; top: 25%; left: -15%;animation: inherit";
+                document.getElementById("option3").style="text-decoration: none; font-family: 'Ubuntu Light'; font-size: 120%; color: black; position: fixed; top: 33%; left: -15%;animation: inherit";
+                document.getElementById("option4").style="text-decoration: none; font-family: 'Ubuntu Light'; font-size: 120%; color: black; position: fixed; top: 41%; left: -15%;animation: inherit";
+                document.getElementById("option5").style="text-decoration: none; font-family: 'Ubuntu Light'; font-size: 120%; color: black; position: fixed; top: 49%; left: -15%;animation: inherit";
+                document.getElementById("option6").style="text-decoration: none; font-family: 'Ubuntu Light'; font-size: 120%; color: black; position: fixed; top: 57%; left: -15%;animation: inherit";
+                document.getElementById("option7").style="text-decoration: none; font-family: 'Ubuntu Light'; font-size: 120%; color: black; position: fixed; top: 65%; left: -15%;animation: inherit";
+                document.getElementById("option8").style="text-decoration: none; font-family: 'Ubuntu Light'; font-size: 120%; color: black; position: fixed; top: 73%; left: -15%;animation: inherit";
+            }
+        }
+
+        var query=""
+
+        function search(i)
+        {
+            if(i==1)
+            {
+                if(document.getElementById("menusearch").value=="")alert("Enter keywords in searchbar before searching.")
+                else
+                {
+                    query=document.getElementById("menusearch").value;
+                    document.getElementById("menusearch").value="";
+                    initiateSearch();
+                }
+            }
+            else
+            {
+                if(document.getElementById("searchbox").value=="")alert("Enter keywords in searchbar before searching.")
+                else
+                {
+                    query=document.getElementById("searchbox").value;
+                    document.getElementById("searchbox").value="";
+                    initiateSearch();
+                }
+            }
+        }
+
+        function initiateSearch()
+        {
+            searchKey = [{"queried": ""+query}];
+            var temp = JSON.stringify(searchKey)
+            //alert(temp)
+            $.post("/searchHandler", temp, function(){});
+            //event.preventDefault();
+            window.open("/searchResults");
+        }
+
+        var searchKey = "";
+
+
+        function showOptions(opNum)
+        {
+            if(opNum==1)
+            {
+                document.getElementById("add").style="position: fixed; top: 10%; left: 17%; font-size: 100%; font-family: Ubuntu;";
+                document.getElementById("remove").style="position: fixed; top: 10%; left: 17%; font-size: 100%; font-family: Ubuntu; visibility: hidden";
+                document.getElementById("change").style="position: fixed; top: 10%; left: 17%; font-size: 100%; font-family: Ubuntu; visibility: hidden";
+                op="add";
+            }
+            else if(opNum==2)
+            {
+                document.getElementById("add").style="position: fixed; top: 10%; left: 17%; font-size: 100%; font-family: Ubuntu; visibility: hidden";
+                document.getElementById("remove").style="position: fixed; top: 10%; left: 17%; font-size: 100%; font-family: Ubuntu;";
+                document.getElementById("change").style="position: fixed; top: 10%; left: 17%; font-size: 100%; font-family: Ubuntu; visibility: hidden";
+                op="remove";
+            }
+            else if(opNum==3)
+            {
+                document.getElementById("add").style="position: fixed; top: 10%; left: 17%; font-size: 100%; font-family: Ubuntu; visibility: hidden";
+                document.getElementById("remove").style="position: fixed; top: 10%; left: 17%; font-size: 100%; font-family: Ubuntu; visibility: hidden";
+                document.getElementById("change").style="position: fixed; top: 10%; left: 17%; font-size: 100%; font-family: Ubuntu;";
+                op="change";
+            }
+            document.getElementById("submit").style="visibility: visible";
+        }
+
+        var op="";
+        var toSend="";
+
+        medList = {{ medList|tojson }}
+
+
+        window.onload = function WindowLoad(event)
+        {
+            for(var i=0;i<medList.length;i++)
+            {
+                tempArr = medList[i].split("#");
+
+                var remOpt = document.getElementById("removeSelection");
+                var chngOpt = document.getElementById("changeMed");
+
+                remOpt.options[remOpt.options.length] = new Option(tempArr[1], tempArr[1].toLowerCase());
+                chngOpt.options[chngOpt.options.length] = new Option(tempArr[1], tempArr[1].toLowerCase());
+            }
+        };
+
+
+        function submitChangeButton()
+        {
+            if(op=="add")
+            {
+
+                var id = document.getElementById("addID").value;
+                var name = document.getElementById("addName").value;
+                var type = document.getElementById("addType").value;
+                var company = document.getElementById("addCompany").value;
+                var price = document.getElementById("addPrice").value;
+                var quantity = document.getElementById("addQuantity").value;
+                var expiry_date = document.getElementById("addDate").value;
+                var shelf = document.getElementById("addShelf").value;
+
+                if(id=="" || name=="" || type=="" || company=="" || price=="" || quantity=="" || expiry_date=="" || shelf=="")
+                {
+                    alert("Please fill up all fields.");
+                    return;
+                }
+
+                //alert(expiry_date)
+
+
+                for(var i=0;i<medList.length;i++)
+                {
+                    tempMed = medList[i].split("#");
+                    if(tempMed[0]==id)
+                    {
+                        alert("ID already in use.");
+                        return;
+                    }
+                }
+
+                toSend=op+"#"+id+"#"+name+"#"+type+"#"+company+"#"+price+"#"+quantity+"#"+expiry_date+"#"+shelf;
+                //alert(toSend);
+                submitChange();
+
+            }
+            else if(op=="remove")
+            {
+
+                var medN = document.getElementById("removeSelection").value;
+                toSend=op+"#"+medN;
+                alert(toSend)
+                submitChange();
+
+            }
+            else if(op=="change")
+            {
+
+                var medN2 = document.getElementById("changeMed").value;
+                var attrbute = document.getElementById("changeAttribute").value;
+                var newValue = document.getElementById("newValue").value;
+                medN2 = medN2.toString();
+                attribute = attrbute.toString();
+                newValue = newValue.toString();
+                if(newValue=="")
+                {
+                    alert("Please enter value.");
+                    return;
+                }
+
+                if(attribute=="id")
+                {
+                    for(var i=0;i<medList.length;i++)
+                    {
+                        tempMed = medList[i].split("#");
+                        if(tempMed[0]==newValue)
+                        {
+                            alert("ID already in use.");
+                            return;
+                        }
+                    }
+                }
+                else if((attribute=="quantity" || attribute=="price") && isNaN(newValue))
+                {
+                    alert("Please insert a valid number");
+                    return;
+                }
+                else if(attribute=="date")
+                {
+                    var tempAtt = newValue.split("-");
+                    var tempVal = [];
+                    tempVal[2]=Number(tempAtt[0])
+                    tempVal[1]=Number(tempAtt[1])
+                    tempVal[0]=Number(tempAtt[2])
+                    if(tempVal[2]<2018)
+                    {
+                        alert("Please insert a valid date.");
+                        return;
+                    }
+                    if(tempVal[1]<1 || tempVal[1]>12)
+                    {
+                        alert("Please insert a valid date.");
+                        return;
+                    }
+                    if((tempVal[1]==9 || tempVal[1]==4 || tempVal==[1]==6 || tempVal[1]==11) && (tempVal[0]>30 || tempVal[0]<1))
+                    {
+                        alert("Please insert a valid date.");
+                        return;
+                    }
+                    if((tempVal[1]==1 || tempVal[1]==3 || tempVal==[1]==5 || tempVal[1]==7 ||
+                        tempVal[1]==8 || tempVal[1]==10 || tempVal[1]==12) && (tempVal[0]>31 || tempVal[0]<1))
+                    {
+                        alert("Please insert a valid date.");
+                        return;
+                    }
+                    if(tempVal[1]==2)
+                    {
+                        if(tempVal[0]<1 || tempVal[0]>29)
+                        {
+                            alert("Please insert a valid date.");
+                            return;
+                        }
+                        if(tempVal[0]==29)
+                        {
+                            if(!(tempVal[2]%400==0 || (tempVal[2]%4==0 && tempVal[2]%100!=0)))
+                            {
+                                alert("Please insert a valid date.");
+                                return;
+                            }
+                        }
+                    }
+                }
+                toSend=op+"#"+medN2+"#"+attrbute+"#"+newValue;
+                alert(toSend)
+                submitChange();
+            }
+
+        }
+
+        function submitChange()
+        {
+            msg = [{"change": ""+toSend}];
+            var temp = JSON.stringify(msg);
+            $.post("/medChange", temp, function(){});
+            location.assign('/medicines');
+        }
+
+    </script>
+
+</head>
+
+<body background="/static/Images/bg.jpg">
+    <a href=".." style="position: fixed; top: 0%; right: 0.5%; font-family: 'Ubuntu Light'; font-size: 130%; text-decoration: none; color: black;">
+        Sign Out
+    </a>
+
+
+    <div id="bar" style="visibility: hidden">
+
+        <p id="menu">Menu</p>
+
+        <form style="animation: inherit" onsubmit="search(1)">
+            <input id="menusearch" type="text" placeholder=" Search..." class="searchbox">
+        </form>
+
+
+        <button id="menuSearchSubmit" onclick="search(1)" style="animation: inherit;">
+            <img src="/static/Images/search.png" width="28" height="28">
+        </button>
+
+        <a id="option1" class="options" href="/home">
+            Home
+        </a>
+
+        <a id="option2" class="options" href="/notifications">
+            Notifications
+        </a>
+
+        <a id="option3" class="options" href="/medicines">
+            Medicines
+        </a>
+
+        <a id="option4" class="options" href="/orders">
+            Orders
+        </a>
+
+        <a id="option5" class="options" href="/makeReceipt">
+            Make Receipt
+        </a>
+
+        <a id="option6" class="options" href="/finances">
+            Finances
+        </a>
+
+        <a id="option7" class="options" href="/accounts">
+            Manage Accounts
+        </a>
+
+        <a id="option8" class="options" href="/aboutUs">
+            About Us
+        </a>
+
+    </div>
+
+    <button style="position: fixed; top: 0.5%; left: -0.5%; width: 3%; height: 7%; background:transparent; border-color: transparent; outline: none;" onclick="collapse()">
+        <img id="clps" src="/static/Images/collapsible.png" height="45" width="45">
+    </button>
+
+    </div>
+
+    <select name="Operation" onchange="showOptions(this.selectedIndex)" style="position: fixed; top: 5%; left: 17%; font-family: Ubuntu; font-size: 100%; background-color: white;
+                                    border: 2px solid black; border-radius: 1px; color: black;">
+        <option value="" disabled selected>Select Operation</option>
+        <option value="add">Add Medicine</option>
+        <option value="remove">Remove Medicine</option>
+        <option value="change">Change Medicine Data</option>
+    </select>
+
+    <div id="add" style="position: fixed; top: 10%; left: 17%; font-size: 100%; font-family: Ubuntu; visibility: hidden;">
+        <input type="text" id="addID" placeholder="Medicine ID" style="position: fixed; top: 12%; left: 17%; background-color: white;
+                            border: 2px solid black; border-radius: 1px; color: black; width: 17%; font-size: 150%; font-family: Ubuntu">
+        <input type="text" id="addName" placeholder="Medicine Name" style="position: fixed; top: 19%; left: 17%; background-color: white;
+                            border: 2px solid black; border-radius: 1px; color: black; width: 17%; font-size: 150%; font-family: Ubuntu">
+        <input type="text" id="addType" placeholder="Medicine Type" style="position: fixed; top: 26%; left: 17%; background-color: white;
+                            border: 2px solid black; border-radius: 1px; color: black; width: 17%; font-size: 150%; font-family: Ubuntu">
+        <input type="text" id="addCompany" placeholder="Medicine Company" style="position: fixed; top: 33%; left: 17%; background-color: white;
+                            border: 2px solid black; border-radius: 1px; color: black; width: 17%; font-size: 150%; font-family: Ubuntu">
+        <input type="number" id="addPrice" placeholder="Medicine Price/Unit" min="1" style="position: fixed; top: 40%; left: 17%; background-color: white;
+                            border: 2px solid black; border-radius: 1px; color: black; width: 17%; font-size: 150%; font-family: Ubuntu">
+        <input type="number" id="addQuantity" placeholder="Medicine Quantity" min="1" style="position: fixed; top: 47%; left: 17%; background-color: white;
+                            border: 2px solid black; border-radius: 1px; color: black; width: 17%; font-size: 150%; font-family: Ubuntu">
+        <input id="addDate" placeholder="Expiry Date" class = "textbox-n" type = "text" onfocus = "(this.type = 'date')" onblur="(this.type='text')"
+               style="position: fixed; top: 54%; left: 17%; background-color: white;
+                            border: 2px solid black; border-radius: 1px; color: black; width: 17%; font-size: 150%; font-family: Ubuntu">
+        <input type="text" id="addShelf" placeholder="Shelf Location" style="position: fixed; top: 61%; left: 17%; background-color: white;
+                            border: 2px solid black; border-radius: 1px; color: black; width: 17%; font-size: 150%; font-family: Ubuntu">
+        <p style="position: fixed; top: 64.5%; left: 17%; color: black; width: 22%; font-size: 150%; font-family: Ubuntu">
+            Upload Medicine Image:
+        </p>
+        <input type="file" id="file" name="file" style="position: fixed; top: 68%; left: 37%;
+                            color: black; font-size: 150%; font-family: Ubuntu">
+    </div>
+
+    <div id="remove" style="position: fixed; top: 10%; left: 17%; font-size: 100%; font-family: Ubuntu; visibility: hidden">
+        <select id="removeSelection" name="RemoveMedicine" style="position: fixed; top: 12%; left: 17%; background-color: white;
+                            border: 2px solid black; border-radius: 1px; color: black; width: 17%; font-size: 150%; font-family: Ubuntu">
+            <option value="" disabled selected>Select Medicine</option>
+        </select>
+    </div>
+
+    <div id="change" style="position: fixed; top: 10%; left: 17%; font-size: 100%; font-family: Ubuntu; visibility: hidden">
+        <select id="changeMed" name="RemoveMedicine" style="position: fixed; top: 12%; left: 17%; background-color: white;
+                            border: 2px solid black; border-radius: 1px; color: black; width: 17%; font-size: 150%; font-family: Ubuntu">
+            <option value="" disabled selected>Select Medicine</option>
+        </select>
+
+        <select id="changeAttribute" name="ChooseAttribute" style="position: fixed; top: 20%; left: 17%; background-color: white;
+                            border: 2px solid black; border-radius: 1px; color: black; width: 17%; font-size: 150%; font-family: Ubuntu">
+            <option value="" disabled selected>Select Attribute</option>
+            <option value="id">ID</option>
+            <option value="name">Name</option>
+            <option value="type">Type</option>
+            <option value="company">Company</option>
+            <option value="price">Price</option>
+            <option value="quantity">Quantity</option>
+            <option value="date">Date</option>
+            <option value="shelf">Shelf</option>
+            <option value="image">Image Path</option>
+        </select>
+
+        <input type="text" id="newValue" style="position: fixed; top: 28%; left: 17%; background-color: white;
+                            border: 2px solid black; border-radius: 1px; color: black; width: 16.7%; font-size: 150%; font-family: Ubuntu" placeholder="New Value">
+        <p id="Hint" style="position: fixed; top: 32%; left: 17%;
+                            color: gray;font-size: 130%; font-family: Ubuntu">Date should be in YYYY-MM-DD format.</p>
+    </div>
+
+    <button class="submitButton" id="submit" style="visibility: hidden" onclick="submitChangeButton()">
+        Submit
+    </button>
+
+</body>
+</html>

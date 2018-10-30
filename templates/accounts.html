@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>Accounts</title>
+    <style>
+        .searchbox
+        {
+            background: white;
+            color: black;
+            font-family: "Ubuntu Light";
+            font-size: 150%;
+            border-radius: 5%;
+            border-width: 3px;
+            border-color: black;
+        }
+
+        .submitButton
+        {
+            position:fixed;
+            top:53%;
+            left: 44%;
+            width: 10%;
+            height: 5%;
+            background: white;
+            border: solid black;
+            border-width: 1.5px;
+            border-radius: 5px;
+            font-family: "Ubuntu Light";
+            color: black;
+            font-size: 100%;
+        }
+
+        .submitButton:hover
+        {
+            position:fixed;
+            top:53%;
+            left: 44%;
+            width: 10%;
+            height: 5%;
+            background: black;
+            border: solid white;
+            border-width: 1.5px;
+            border-radius: 5px;
+            font-family: "Ubuntu Light";
+            color: white;
+            font-size: 100%;
+        }
+
+        .options
+        {
+            background: white;
+            color: black;
+            text-align: center;
+            height: 8%;
+            width: 15%;
+        }
+
+        .options:hover
+        {
+            background: black;
+            color: white;
+            text-align: center;
+            height: 8%;
+            width: 15%;
+        }
+
+        .expand
+        {
+            position: fixed;
+            top: 0%;
+            left:0%;
+            width: 15%;
+            height: 100%;
+            background-color: white;
+            color: black;
+            border: solid black;
+            border-width: 2px;
+            border-bottom-right-radius: 2%;
+            border-top-right-radius: 2%;
+            animation-duration: 0.5s;
+            animation-name: expandAnim;
+        }
+
+        .collapse
+        {
+            position: fixed;
+            top: 0%;
+            left:-20%;
+            width: 15%;
+            height: 100%;
+            background-color: white;
+            color: black;
+            border: solid black;
+            border-width: 2px;
+            border-bottom-right-radius: 2%;
+            border-top-right-radius: 2%;
+            animation-duration: 0.5s;
+            animation-name: collapseAnim;
+        }
+
+        @keyframes expandAnim
+        {
+            0% { left: -20%; }
+            100% { left: 0%; }
+        }
+
+        @keyframes collapseAnim
+        {
+            0% { left: 0%; }
+            100% { left: -20%; }
+        }
+
+        @keyframes expandButtonAnim
+        {
+            0% { left: 0%; }
+            100% { left: 12%; }
+        }
+
+        @keyframes collapseButtonAnim
+        {
+            0% { left: 12%; }
+            100% { left: 0%; }
+        }
+
+
+    </style>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script type="text/javascript">
+        var counter=0;
+        function collapse()
+        {
+            counter++;
+            if(counter%2==1)
+            {
+                document.getElementById("clps").src="/static/Images/collapsed.png";
+                document.getElementById("clps").style="position: fixed; top: 0%; left: 12%; width: 3%; height: 7%; background:transparent; border-color: transparent; animation-name: expandButtonAnim; animation-duration: 0.5s";
+                document.getElementById("bar").style="visibility: visible";
+                document.getElementById("bar").className="expand";
+                document.getElementById("menu").style="color: black; font-family: 'Ubuntu Light'; font-size: 150%; position: fixed; top: -3%; left: 0.5%; animation: inherit";
+                document.getElementById("menusearch").style="position: fixed; top: 8%; left: 0.2%; width: 14.4%; font-size: 100%; height: 5%;animation: inherit";
+                document.getElementById("menuSearchSubmit").style="position: fixed; top: 8.2%; left: 11.5%; animation: inherit; background: transparent; border-color: transparent; outline: none; animation-duration: 0.3s";
+                document.getElementById("option1").style="text-decoration: none; font-family: 'Ubuntu Light'; font-size: 120%; position: fixed; top: 17%; padding-top: 0.7%; animation: inherit";
+                document.getElementById("option2").style="text-decoration: none; font-family: 'Ubuntu Light'; font-size: 120%; position: fixed; top: 25%; padding-top: 0.7%; animation: inherit";
+                document.getElementById("option3").style="text-decoration: none; font-family: 'Ubuntu Light'; font-size: 120%; position: fixed; top: 33%; padding-top: 0.7%; animation: inherit";
+                document.getElementById("option4").style="text-decoration: none; font-family: 'Ubuntu Light'; font-size: 120%; position: fixed; top: 41%; padding-top: 0.7%; animation: inherit";
+                document.getElementById("option5").style="text-decoration: none; font-family: 'Ubuntu Light'; font-size: 120%; position: fixed; top: 49%; padding-top: 0.7%; animation: inherit";
+                document.getElementById("option6").style="text-decoration: none; font-family: 'Ubuntu Light'; font-size: 120%; position: fixed; top: 57%; padding-top: 0.7%; animation: inherit";
+                document.getElementById("option7").style="text-decoration: none; font-family: 'Ubuntu Light'; font-size: 120%; position: fixed; top: 65%; padding-top: 0.7%; animation: inherit";
+                document.getElementById("option8").style="text-decoration: none; font-family: 'Ubuntu Light'; font-size: 120%; position: fixed; top: 73%; padding-top: 0.7%; animation: inherit";
+            }
+            else
+            {
+                document.getElementById("clps").src="/static/Images/collapsible.png";
+                document.getElementById("clps").style="position: fixed; top: 0%; left: 0%; width: 3%; height: 7%; background:transparent; border-color: transparent; animation-name: collapseButtonAnim; animation-duration: 0.5s";
+                document.getElementById("bar").className="collapse";
+                document.getElementById("menu").style="color: black; font-family: 'Ubuntu Light'; font-size: 150%; position: fixed; top: -3%; left: -15%; animation: inherit";
+                document.getElementById("menusearch").style="position: fixed; top: 8%; left: -16%; width: 14.4%; font-size: 100%; height: 5%;animation: inherit";
+                document.getElementById("menuSearchSubmit").style="position: fixed; top: 8%; left: -15%; animation: inherit; background: transparent; border-color: transparent; animation-duration: 0.3s";
+                document.getElementById("option1").style="text-decoration: none; font-family: 'Ubuntu Light'; font-size: 120%; color: black; position: fixed; top: 17%; left: -15%;animation: inherit";
+                document.getElementById("option2").style="text-decoration: none; font-family: 'Ubuntu Light'; font-size: 120%; color: black; position: fixed; top: 25%; left: -15%;animation: inherit";
+                document.getElementById("option3").style="text-decoration: none; font-family: 'Ubuntu Light'; font-size: 120%; color: black; position: fixed; top: 33%; left: -15%;animation: inherit";
+                document.getElementById("option4").style="text-decoration: none; font-family: 'Ubuntu Light'; font-size: 120%; color: black; position: fixed; top: 41%; left: -15%;animation: inherit";
+                document.getElementById("option5").style="text-decoration: none; font-family: 'Ubuntu Light'; font-size: 120%; color: black; position: fixed; top: 49%; left: -15%;animation: inherit";
+                document.getElementById("option6").style="text-decoration: none; font-family: 'Ubuntu Light'; font-size: 120%; color: black; position: fixed; top: 57%; left: -15%;animation: inherit";
+                document.getElementById("option7").style="text-decoration: none; font-family: 'Ubuntu Light'; font-size: 120%; color: black; position: fixed; top: 65%; left: -15%;animation: inherit";
+                document.getElementById("option8").style="text-decoration: none; font-family: 'Ubuntu Light'; font-size: 120%; color: black; position: fixed; top: 73%; left: -15%;animation: inherit";
+            }
+        }
+
+        var query=""
+        function search()
+        {
+            if(document.getElementById("menusearch").value=="")alert("Enter keywords in searchbar before searching.")
+            else
+            {
+                query=document.getElementById("menusearch").value;
+                document.getElementById("menusearch").value="";
+                initiateSearch();
+            }
+        }
+
+        function initiateSearch()
+        {
+            searchKey = [{"queried": ""+query}];
+            var temp = JSON.stringify(searchKey)
+            //alert(temp)
+            $.post("/searchHandler", temp, function(){});
+            //event.preventDefault();
+            window.open("/searchResults");
+        }
+
+
+        currentUser = {{ currentUser|tojson }}
+        currentUserType = {{ currentUserType|tojson }}
+
+        var username, password, type;
+
+        window.onload = function WindowLoad(event)
+        {
+            var temp = currentUser.split("*");
+            username=temp[0];
+            password=temp[1];
+            type=currentUserType;
+            if(type!="admin")
+            {
+                alert("You need admin privileges to access accounts information.");
+                window.history.back();
+            }
+        }
+
+
+    </script>
+
+</head>
+
+<body background="/static/Images/bg.jpg">
+    <a href=".." style="position: fixed; top: 0%; right: 0.5%; font-family: 'Ubuntu Light'; font-size: 130%; text-decoration: none; color: black;">
+        Sign Out
+    </a>
+
+
+    <div id="bar" style="visibility: hidden">
+
+        <p id="menu">Menu</p>
+
+        <form style="animation: inherit" onsubmit="search()">
+            <input id="menusearch" type="text" placeholder=" Search..." class="searchbox">
+        </form>
+
+
+        <button id="menuSearchSubmit" onclick="search()" style="animation: inherit">
+            <img src="/static/Images/search.png" width="28" height="28">
+        </button>
+
+        <a id="option1" class="options" href="/home">
+            Home
+        </a>
+
+        <a id="option2" class="options" href="/notifications">
+            Notifications
+        </a>
+
+        <a id="option3" class="options" href="/medicines">
+            Medicines
+        </a>
+
+        <a id="option4" class="options" href="/orders">
+            Orders
+        </a>
+
+        <a id="option5" class="options" href="/makeReceipt">
+            Make Receipt
+        </a>
+
+        <a id="option6" class="options" href="/finances">
+            Finances
+        </a>
+
+        <a id="option7" class="options" href="">
+            Manage Accounts
+        </a>
+
+        <a id="option8" class="options" href="/aboutUs">
+            About Us
+        </a>
+
+    </div>
+
+    <button style="position: fixed; top: 0.5%; left: -0.5%; width: 3%; height: 7%; background:transparent; border-color: transparent; outline: none;" onclick="collapse()">
+        <img id="clps" src="/static/Images/collapsible.png" height="45" width="45">
+    </button>
+
+    </div>
+
+</body>
+</html>
