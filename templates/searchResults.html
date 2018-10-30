@@ -6,11 +6,55 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 <!DOCTYPE HTML>
 <html>
 <head>
-<title>Pharmassistant</title>
+<title>Search Results</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="keywords" content="Shoppy Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android Compatible web template,
 Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyEricsson, Motorola web design" />
+    <style>
+        .searchbox
+        {
+            background: white;
+            color: black;
+            font-family: "Ubuntu Light";
+            font-size: 150%;
+            border-radius: 5%;
+            border-width: 3px;
+            border-color: black;
+        }
+
+        .submitButton
+        {
+            position:fixed;
+            top: 15%;
+            right: 4%;
+            width: 10%;
+            height: 6%;
+            background: white;
+            border: solid black;
+            border-width: 1.5px;
+            border-radius: 2px;
+            font-family: "Ubuntu Light";
+            color: black;
+            font-size: 100%;
+        }
+
+        .submitButton:hover
+        {
+            position:fixed;
+            top: 15%;
+            right: 4%;
+            width: 10%;
+            height: 6%;
+            background: black;
+            border: solid white;
+            border-width: 1.5px;
+            border-radius: 2px;
+            font-family: "Ubuntu Light";
+            color: white;
+            font-size: 100%;
+        }
+    </style>
 <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <link href="static/css/bootstrap.css" rel="stylesheet" type="text/css" media="all">
@@ -155,7 +199,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 											 </a></li>
 											 <li>
 												<div class="notification_bottom">
-													<a href="#">See all notifications</a>
+													<a href="notifications">See all notifications</a>
 												</div>
 											</li>
 										</ul>
@@ -212,169 +256,84 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <script type="text/javascript">
+        var query="";
 
-
-
-        orderlist = {{ orderlist|tojson}};
-        medOrderList = {{ medOrderList|tojson}};
-        console.log(medOrderList);
-        console.log(orderlist);
-        function createCell(cell, text, style) {
-            var div = document.createElement('div'), // create DIV element
-                txt = document.createTextNode(text); // create text node
-            div.appendChild(txt);                    // append text node to the DIV
-           // div.setAttribute('class', style);        // set DIV class attribute
-            //div.setAttribute('className', style);    // set DIV class attribute for IE (?!)
-            cell.appendChild(div);                   // append DIV to the table cell
+        function search()
+        {
+            if(document.getElementById("searchbox").value=="")alert("Enter keywords in searchbar before searching.")
+            else
+            {
+                query=document.getElementById("searchbox").value;
+                document.getElementById("searchbox").value="";
+                initiateSearch();
+            }
         }
 
-        function showModal() {
-            $('#myModal').modal(options)
-        }
-        function loadData() {
-            orders = orderlist;
-
-             for (var i = 0; i < orders.length; i++) {
-                 order = JSON.parse(orders[i]);
-                 var tbl = document.getElementById('ordertbl'), // table reference
-                 row = tbl.insertRow(tbl.rows.length),      // append table row
-                 i;
-                // insert table cells to the new row
-
-                 createCell(row.insertCell(0), order.orderID, 'row');
-                 createCell(row.insertCell(1), order.companyName, 'row');
-                 createCell(row.insertCell(2), order.totalCost, 'row');
-                 createCell(row.insertCell(3), order.due, 'row');
-                 createCell(row.insertCell(4), order.orderDate, 'row');
-                 createCell(row.insertCell(5), order.dueDate, 'row');
-                 createCell(row.insertCell(6), order.status, 'row');
- // <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@getbootstrap">Open modal for @getbootstrap</button>
-
-                 newCell = row.insertCell(7);
-                 newElem = document.createElement( 'input' );
-                 newElem.setAttribute("type", "button");
-                 newElem.setAttribute("value", "Details");
-                 newElem.setAttribute("class", "btn btn-primary");
-                 //newElem.setAttribute("onclick", "showModal(this)");
-                 newElem.setAttribute("data-toggle", "modal");
-                 newElem.setAttribute("data-target", "#exampleModal");
-                 newElem.setAttribute("data-whatever", i);
-
-
-
-                 newCell.appendChild(newElem);
-
-             }
+        function initiateSearch()
+        {
+            searchKey = [{"queried": ""+query}];
+            var temp = JSON.stringify(searchKey);
+            $.post("/searchHandler", temp, function(){});
+            window.location="/searchResults";
         }
 
-        $('#exampleModal').on('show.bs.modal', function (event) {
-          var button = $(event.relatedTarget);// Button that triggered the modal
-          var recipient = button.data('whatever'); // Extract info from data-* attributes
-          // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-          // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-         console.log(recipient);
-        console.log("sssss");
-          var modal = $(this);
+        searchResults = {{ searchResults|tojson }}
 
-          modal.find('.modal-title').text('New message to ' + recipient);
-          modal.find('.modal-body input').val(recipient);
-        })
+        function showMeds()
+        {
+            if(searched.toString().toUpperCase()=="No matches".toUpperCase())
+            {
+                document.getElementById("listbox").appendChild(document.createTextNode("No Matches Found"));
+                return;
+            }
+            var table = document.getElementById("listbox");
+            for(var i=0;i<searchResults.length;i++)
+            {
+                med = searchResults[i].split("#");
+                var row = table.insertRow(-1);
+                var id = row.insertCell(0).innerHTML=med[0];
+                var name = row.insertCell(1).innerHTML=med[1];
+                var type = row.insertCell(2).innerHTML=med[2];
+                var com = row.insertCell(3).innerHTML=med[3];
+                var price = row.insertCell(4).innerHTML=med[4];
+                var quan = row.insertCell(5).innerHTML=med[5];
+                var date = row.insertCell(6).innerHTML=med[6];
+                var location = row.insertCell(7).innerHTML=med[7];
+                var imgEl = document.createElement('img');
+                imgEl.src = med[8];
+                imgEl.height=90;
+                imgEl.width=100;
+                var img = row.insertCell(8).appendChild(imgEl)
+            }
+        };
+
+        window.onload = function WindowLoad(event)
+        {
+            showMeds();
+        };
+
+        var searchKey = "";
+
 
     </script>
 
 <!--inner block start here-->
 <div class="inner-block" style="height: 700px;">
 	<!-- <% emne eitar vitor python code lkha jay %> -->
-        <div>
+    <div>
 
 
-    <div  class="col-sm-12">
 
-        <div align="left"class="page-header">
-        <h1 > Order Lists</h1>
+        <!-- NEW HTML PAGE CODE GOES HERE -->
+
+
+        <!-- COPY PASTE YOUR HTML BODY CODE HERE -->
+
+
+        <!-- NEW HTML PAGE CODE ENDS HERE -->
+
+
     </div>
-        <form align="right" action="/orders/placeOrder" method="post">
-
-        <button type="submit" id="createOrderBtn" data-loading-text="Loading..." class="btn btn-primary"> Make New order</button>
-        </form>
-    </div>
-
-
-
-    <table id="ordertbl" class="table table-hover table-bordered ">
-          <thead class="thead-dark">
-            <tr>
-
-                <th scope="col">Order ID</th>
-                <th scope="col">Company Name</th>
-                <th scope="col">Total Cost</th>
-                <th scope="col">Due Amount</th>
-                <th scope="col">Order Date</th>
-                <th scope="col">Due Date</th>
-                <th scope="col">Status</th>
-                <th scope="col">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-
-          </tbody>
-        </table>
-</div>
-
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">New message</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-            <div class="form-group">
-            <label for="orderID" class="col-form-label">Order ID:</label>
-            <input type="text" class="form-control" id="orderID" disabled>
-          </div>
-          <div class="form-group">
-            <label for="companyName" class="col-form-label">Company Name:</label>
-            <input class="form-control" id="companyName" disabled>
-          </div>
-
-          <table id="orderDetails" class="table table-hover table-bordered ">
-          <thead class="thead-dark">
-            <tr>
-                <th scope="col">Medicine Name</th>
-                <th scope="col">Quantity</th>
-                <th scope="col">Cost</th>
-
-            </tr>
-          </thead>
-          <tbody>
-
-          </tbody>
-        </table>
-        <form>
-          <div class="form-group">
-            <label for="totalCost" class="col-form-label">Total Cost:</label>
-            <input type="text" class="form-control" id="totalCost" disabled>
-          </div>
-          <div class="form-group">
-            <label for="paid" class="col-form-label">Paid Amount:</label>
-            <input class="form-control" id="paid" disabled>
-          </div>
-            <div class="form-group">
-            <label for="due" class="col-form-label">Due Amount:</label>
-            <input class="form-control" id="due" disabled>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Update</button>
-      </div>
-    </div>
-  </div>
-</div>
 
 </div>
 <!--inner block end here-->
@@ -395,7 +354,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 		          <ul id="menu-comunicacao-sub" >
 		            <li id="menu-mensagens" style="width: 120px" ><a href="/medicines">Medicine List</a>
 		            </li>
-		            <li id="menu-arquivos" ><a href="typography.html">Add Medicine</a></li>
+		            <li id="menu-arquivos" ><a href="/medicineListModify">Add Medicine</a></li>
 		            <li id="menu-arquivos" ><a href="icons.html">Icons</a></li>
 		          </ul>
 		        </li>
@@ -428,6 +387,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	<div class="clearfix"> </div>
 </div>
 <!--slide bar menu end here-->
+
+
+
 <script>
 var toggle = true;
 
@@ -453,5 +415,49 @@ $(".sidebar-icon").click(function() {
 		<!--//scrolling js-->
 <script src="static/js/bootstrap.js"> </script>
 <!-- mother grid end here-->
+
+    <input id="searchbox" type="text" style="position:fixed; top: 15%; left: 30%; width: 39%; height: 6%; font-family: 'Ubuntu Light';
+                                font-size: 100%; border: 2px solid black; border-radius: 2px" placeholder=" Search for a medicine...">
+
+    <button id="menuSearchSubmit" onclick="search()" style="position: fixed; top: 15.2%; left: 66%;
+                                                    background: transparent; border-color: transparent; outline: none">
+            <img src="/static/Images/search.png" width="28" height="28">
+        </button>
+
+    <button class="submitButton" onclick="window.location='/makeReceipt'">
+        Sell Medicine
+    </button>
+
+    <button class="submitButton" style="right: 15%" onclick="window.location='/medicineListModify'">
+        Add/Remove
+    </button>
+
+
+    <div style="white-space: pre-line; position: fixed; top: 24%; left: 17%;
+     height: 70%; width: 80%; font-size: 100%; font-family: 'Ubuntu Light'; overflow: auto;">
+        <table id="listbox">
+            <col style="width: 8.5%">
+            <col style="width: 8.5%">
+            <col style="width: 8.5%">
+            <col style="width: 8.5%">
+            <col style="width: 8.5%">
+            <col style="width: 8.5%">
+            <col style="width: 8.5%">
+            <col style="width: 8.5%">
+            <col style="width: 8.5%">
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Company</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Expiry Date</th>
+                <th>Shelf</th>
+                <th>Image Sample</th>
+            </tr>
+        </table>
+    </div>
+
 </body>
 </html>

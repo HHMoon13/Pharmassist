@@ -1,6 +1,6 @@
 from flask import *
 from Classes.Utilities import Iterator
-from Classes.DatabaseAccessors import AccessDatabaseMedicines as adm, AccessDatabaseAccounts as ada
+from Classes.DatabaseAccessors import AccessDatabaseMedicines as adm, AccessDatabaseAccounts as ada, AccessDatabaseVendors as adv
 from Classes import Statics
 import Classes.DatabaseHandlers.fetch
 from Classes.Notifications import MedicineList
@@ -79,7 +79,27 @@ def accountsPage():
     while a.hasNext():
         accountList.append(a.next())
     print(accountList)
-    return render_template('accounts.html', currentUser=currentUser, currentUserType=currentUserType, accountList=accountList)
+    return render_template('accounts.html', currentUserType=currentUserType, accountList=accountList)
+
+
+@app.route('/companies')
+def companiesPage():
+    vendorList = []
+    a = Iterator.Iterator
+    a = adv.AccessDatabaseVendors().getIterator()
+    while a.hasNext():
+        vendorList.append(a.next())
+    return render_template('companies.html', vendorList=vendorList)
+
+
+@app.route('/addCompany')
+def newCompanyPage():
+    vendorList = []
+    a = Iterator.Iterator
+    a = adv.AccessDatabaseVendors().getIterator()
+    while a.hasNext():
+        vendorList.append(a.next())
+    return render_template('newCompanyPage.html', vendorList=vendorList)
 
 @app.route('/newUser')
 def newUserPage():
@@ -99,13 +119,21 @@ def addNewUser():
         message += str(i['message'])
     Statics.userList.append(message)
 
+@app.route('/addCompanyHandler', methods=['POST'])
+def addNewCompany():
+    message=""
+    temp = request.get_json(force=True)
+    for i in temp:
+        message += str(i['comp'])
+    Statics.vendorList.append(message)
+
 
 @app.route('/searchResults')
 def resultsPage():
     Statics.searchResult=""
     a = Iterator.Iterator
     a = adm.AccessDatabaseMedicines().getIterator()
-    searched  = a.search(Statics.searchKey)
+    searched = a.search(Statics.searchKey)
     return render_template('searchResults.html', searched = searched)
 
 

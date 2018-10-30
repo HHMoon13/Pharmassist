@@ -52,6 +52,6 @@ class AccessDatabaseMedicines(Container.Container):
                     if (i.capitalize()).__contains__((Statics.searchKey).capitalize()):
                         result += temp1 + "*"
                         break
-            if result == "":
+            if result == "" or toSearch=="":
                 result = "No Matches"
             return result
