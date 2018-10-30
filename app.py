@@ -8,6 +8,7 @@ from Classes.Models import *
 from Classes.ManageOrders import CompanyList as companyList
 from Classes.ManageOrders import medOrderList as medOrderList
 from Classes.ManageOrders import OrderList as OrderList
+from Classes.Utilities import OperationFactory
 
 app = Flask(__name__)
 
@@ -152,22 +153,7 @@ def medChange():
     a = adm.AccessDatabaseMedicines().getIterator()
     for i in changeRequest:
         temp += str(i['change'])
-    temp2=temp.split("#")
-    if temp2[0]=="add":
-        print(temp2)
-        temp3=""
-        for i in temp2:
-            if i!="add":
-                temp3+=i+"#"
-        if temp2.__len__()<10:
-            temp3+="/static/Images/generic.png"
-        Statics.medList.append(temp3)
-        a.add(temp3)
-    elif temp2[0]=="remove":
-        a.remove(temp2[1])
-    elif temp2[0]=="change":
-        print(temp2)
-        a.update(temp2[1], temp2[2], temp2[3])
+    opF = OperationFactory.OperationFactory().executeOperation(temp)
 
 
 @app.route('/authCheck', methods=['POST'])

@@ -290,7 +290,6 @@ function showOptions(opNum)
 
         window.onload = function WindowLoad(event)
         {
-            var Exp = /((^[0-9]+[a-z]+)|(^[a-z]+[0-9]+))+[0-9a-z]+$/i;
             for(var i=0;i<medList.length;i++)
             {
                 tempArr = medList[i].split("#");
@@ -319,6 +318,7 @@ function showOptions(opNum)
                 var quantity = document.getElementById("addQuantity").value;
                 var expiry_date = document.getElementById("addDate").value;
                 var shelf = document.getElementById("addShelf").value;
+
 
                 if(id=="")
                 {
@@ -356,7 +356,7 @@ function showOptions(opNum)
                     return;
                 }
 
-                if(date=="")
+                if(expiry_date=="")
                 {
                     alert("Please enter medicine expiry date");
                     return;
@@ -367,8 +367,6 @@ function showOptions(opNum)
                     alert("Please enter medicine shelf number");
                     return;
                 }
-
-                //alert(expiry_date)
 
 
                 for(var i=0;i<medList.length;i++)
@@ -382,7 +380,6 @@ function showOptions(opNum)
                 }
 
                 toSend=op+"#"+id+"#"+name+"#"+type+"#"+company+"#"+price+"#"+quantity+"#"+expiry_date+"#"+shelf;
-                //alert(toSend);
                 submitChange();
 
             }
@@ -609,7 +606,7 @@ $(".sidebar-icon").click(function() {
     </select>
 
     <div id="add" style="position: fixed; top: 20%; left: 18%; font-size: 100%; font-family: Ubuntu; visibility: hidden;">
-        <input type="text" id="addID" placeholder="Medicine ID" style="position: fixed; top: 25%; left: 18%; background-color: white;
+        <input type="number" id="addID" min="1" placeholder="Medicine ID" style="position: fixed; top: 25%; left: 18%; background-color: white;
                             border: 2px solid black; border-radius: 1px; color: black; width: 17%; font-size: 150%; font-family: Ubuntu">
         <input type="text" id="addName" placeholder="Medicine Name" style="position: fixed; top: 32%; left: 18%; background-color: white;
                             border: 2px solid black; border-radius: 1px; color: black; width: 17%; font-size: 150%; font-family: Ubuntu">
