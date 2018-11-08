@@ -221,7 +221,7 @@
               inner_html+=  "<div class=\"card\"> <div class=\""+noti_type+"\"><p><strong>";
               if(noti_type=="empty") inner_html+="Empty!";
               else inner_html+="Expired!";
-              inner_html+= "</strong> "+ obj.name + ", ID: "+obj.medID+ ", Type: "+obj.type+", shelf: "+obj.shelf;
+              inner_html+= "</strong> "+ obj.name + " [ ID: "+obj.medID+ ", "+obj.type+", Location: "+obj.shelf +" Shelf ]";
               inner_html+= "</p> </div> </div>\n"
 
             }

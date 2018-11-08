@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from Classes.Utilities import Iterator, Container
 from Classes import Statics
+from Classes.DatabaseHandlers import add as add
 
 class AccessDatabaseNotifications(Container.Container):
 
@@ -33,6 +34,7 @@ class AccessDatabaseNotifications(Container.Container):
 
         def add(self, toAdd):
             temp=toAdd
+            add.Add("<class 'create_table.Notifications'>", toAdd)
             #pass temp to a database management class method
 
         def remove(self, toBeRemove):

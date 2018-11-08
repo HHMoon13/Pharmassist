@@ -1,4 +1,8 @@
 from flask import *
+
+from Classes.Notifications.NotificationGenerator import NotificationGenerator
+from Classes.Notifications.NotificationPageManager import NotificationPageManager
+from Classes.Notifications.UnreadNotificationManager import UnreadNotificationManager
 from Classes.Utilities import Iterator
 from Classes.DatabaseAccessors import AccessDatabaseMedicines as adm, AccessDatabaseAccounts as ada, AccessDatabaseVendors as adv
 from Classes import Statics
@@ -220,7 +224,6 @@ def placeOrderPage():
     return render_template('placeOrder.html', vendorslist=v.vendorsList(), medList=m.mediList())
 
 
-#
 @app.route('/addreceipt', methods=['POST'])
 def receipt():
     temp =request.form['mydata']
@@ -230,13 +233,24 @@ def receipt():
     #Date is in YYYY-MM-DD format
     print(x)
 
-@app.route('/testing')
+@app.route('/t')
 def testpage():
-    #test=Statics.currentReceipt
-    # return render_template('newFeature.html',test=test)
-    return render_template('newFeature.html')
+    notiPage = NotificationPageManager()
+    notiPage.showAllNotifications()
+    return 'ok'
 
+@app.route('/tt')
+def testDemo():
+    s= []
+    s.append("a")
+    s.append("b")
+    n = NotificationGenerator()
+    u = UnreadNotificationManager(n)
+    n.generateEmptyNotification(medID=1,medName="napa",medShelf="22A",notiID=1)
 
+    print(UnreadNotificationManager.unreadCount)
+
+    return render_template("demo.html",newNotifications = UnreadNotificationManager.unreadCount,s=UnreadNotificationManager.unreadNotis)
 
 if __name__ == '__main__':
     app.run()

@@ -54,9 +54,13 @@ class Orders(Base):
 class Notifications(Base):
     __tablename__ = "notifications"
 
-    notification_id = Column('notification_id', Integer, primary_key=True)
-    notification = Column('notification', String(50))
-    time = Column('time', Time)
+    notificationID = Column('notificationID', Integer, primary_key=True)
+    type = Column('type', String(50))
+    notiString = Column('notiString', String(50))
+    medID = Column('medID', String(50))
+    medName = Column('medName', String(50))
+    medShelf = Column('medShelf', String(50))
+    status = Column('status', String(50))
 
 
 class Sellings(Base):

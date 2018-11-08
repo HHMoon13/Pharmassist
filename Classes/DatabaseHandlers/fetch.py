@@ -51,8 +51,8 @@ def Fetch():
 
     users = session.query(Classes.DatabaseHandlers.create_table.Notifications).all()
     for user in users:
-            m = str(user.notification_id)
-            s = m + '#' + user.notification + '#' + str(user.time)
+            m = str(user.notificationID)
+            s = m + '#' + user.type + '#' + user.notiString + '#' + user.medID + '#' + user.medName + '#' + user.medShelf + '#' + user.status
             notificationList.append(s)
     print(notificationList)
 

@@ -155,7 +155,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 											 </a></li>
 											 <li>
 												<div class="notification_bottom">
-													<a href="#">See all notifications</a>
+													<a href="/notifcations">See all notifications</a>
 												</div>
 											</li>
 										</ul>
@@ -218,33 +218,39 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
         // YOUR PAGE RELATED ANY JS CODE
 
 
-        notiList = {{ notiList|tojson}}
+        notifications = {{ notifications|tojson }};
+        // notificationObjects = [];
+        // for(var i=0; i<notifications.length; i++)
+        // {
+        //     notificationObjects.push(JSON.parse(notifications[i]));
+        // }
 
         function showNotifications()
         {
             inner_html = "<br>\n";
 
-            for(var i=0;i<notiList.length;i++)
+            for(var i=0;i<notifications.length;i++)
             {
-                parts = notiList[i].split("#");
-                noti_type = parts[0]; // empty or expired
-                console.log(parts[1]);
-                notificationObj = JSON.parse(parts[1]);
+                //console.log(notifications[i]);
+                notificationObj = JSON.parse(notifications[i]);
+                noti_type = notificationObj.type
 
                 button_text = "Udpate Information";
-                if(noti_type=="empty") button_text = "Add More Medicine";
-                else if(noti_type=="expired") button_text = "Remove From Shelf";
+                if(noti_type=="Empty") button_text = "Add More Medicine";
+                else if(noti_type=="Expired") button_text = "Remove From Shelf";
 
 
-                if(noti_type=="empty")inner_html +='<div class="alert alert-info ">\n';
-                else if (noti_type=="expired")inner_html +='<div class="alert alert-danger ">\n';
+                if(noti_type=="Empty")inner_html +='<div class="alert alert-info ">\n';
+                else if (noti_type=="Expired")inner_html +='<div class="alert alert-danger ">\n';
 
                 inner_html +='<button aria-hidden="true" data-dismiss="alert" class="close" type="button" style="margin-left: 50px">×</button>';
-                inner_html += '<a href="https://www.w3schools.com/" class="btn btn-xs btn-primary pull-right">'+button_text+'</a>';
+                inner_html += '<a href="https://www.w3schools.com/" class="btn btn-xs btn-primary pull-right"\ ' +
+                    'data-toggle="modal" data-target="#exampleModal" data-whatever='+i+'>'+button_text+'</a>';
 
-                if(noti_type=="empty") inner_html += '<strong>Sotck Empty:';
-                else if (noti_type=="expired") inner_html +='<strong> Date Expired:';
-                inner_html +='</strong>  ' + notificationObj.name + '     [ID: '+notificationObj.medID+ ', Location: '+notificationObj.shelf +' Shelf ]';
+                if(noti_type=="Empty") inner_html += '<strong>Stock Empty:';
+                else if (noti_type=="Expired") inner_html +='<strong> Date Expired:';
+
+                inner_html +='</strong>  ' +notificationObj.notiString;
                 inner_html += '</div>';
 
             }
@@ -254,12 +260,39 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
         }
 
+
+$(document).on('show.bs.modal','#exampleModal', function (event) {
+             var button = $(event.relatedTarget); // Button that triggered the modal
+              var id = button.data('whatever'); // Extract info from data-* attributes
+              // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+              // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+           console.log(id);
+
+              var modal = $(this);
+            //var tbl = modal.find('.orderDetails');
+            order = JSON.parse(notifications[id]);
+            medID = order.medID;
+            document.getElementById("medID").value = medID;
+            document.getElementById("medName").value = order.medName;
+
+            modal.find('.modal-title').text('Adding Medincine');
+             // modal.find('.modal-body input').val(id);
+        })
+
         window.onload = function WindowLoad(event)
         {
             showNotifications();
         }
 
+        function intValidation(e) {
+            var inputkeyCode = e.keyCode ? e.keyCode : e.which;
 
+            if(inputkeyCode!=null){
+                if(inputkeyCode<48 ) e.preventDefault();
+                if(inputkeyCode>57) e.preventDefault();
+            }
+
+        }
 
     </script>
 
@@ -292,6 +325,38 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
 
     </div>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+            <div class="form-group">
+            <label for="medID" class="col-form-label">Medicine ID:</label>
+            <input type="text" class="form-control" id="medID" disabled>
+          </div>
+          <div class="form-group">
+            <label for="medName" class="col-form-label">Medicine Name:</label>
+            <input class="form-control" id="medName" disabled>
+          </div>
+          <div class="form-group">
+            <label for="addQty" class="col-form-label">Adding Quantity:</label>
+            <input class="form-control" id="addQty" onkeypress="intValidation(event)" >
+          </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Update</button>
+      </div>
+    </div>
+  </div>
+</div>
 	<!--MyCode Ends Here-->
 
 </div>
@@ -367,7 +432,7 @@ $(".sidebar-icon").click(function() {
                 toggle = !toggle;
             });
 </script>
-<!--scrolling js-->
+		<!--scrolling js-->
 		<script src="static/js/jquery.nicescroll.js"></script>
 		<script src="static/js/scripts.js"></script>
 		<!--//scrolling js-->
