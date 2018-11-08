@@ -1,5 +1,6 @@
 #from Classes.Notifications.Observable import Observable
 from Classes import Statics
+from Classes.ManageOrders import medOrderList
 from Classes.Models.orders import Order
 import json
 import datetime
@@ -7,15 +8,13 @@ import datetime
 
 class OrderList(object):
 
-    """all the medicines"""
-
     def __init__(self):
         self.order = self.createOrdersList()
 
     def createOrdersList(self):
 
         orders = []
-        orderList = Statics.orderList  # [] #list of objects, will be collected from database
+        orderList = Statics.orderlistList  # [] #list of objects, will be collected from database
 
         for item in orderList:
             # print(item)
@@ -34,7 +33,27 @@ class OrderList(object):
 
         return list
 
+    def mapOrder(self):
+        mediOrder = medOrderList.medOrderList()
+        medilist = mediOrder.get_medordersList()
+        orders = []
+        for item in self.order:
+            list = []
+            for med in medilist:
+
+                medi = json.loads(med)
+                if medi["order_id"] == item.orderID:
+                    list.append(medi)
+
+            str = item.orderID + " : " + list
+            orders.append(str)
+
+        print(orders)
 
 
 
+    def addOrder(self,order):
+        m = Order("003", order['companyName'], sp[2], sp[3], sp[4], sp[5], sp[6], sp[7])
 
+    def get_cost(self):
+        pass

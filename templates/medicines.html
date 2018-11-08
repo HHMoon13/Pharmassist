@@ -26,7 +26,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
         .submitButton
         {
             position:fixed;
-            top: 15%;
+            top: 17%;
             right: 4%;
             width: 10%;
             height: 6%;
@@ -42,7 +42,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
         .submitButton:hover
         {
             position:fixed;
-            top: 15%;
+            top: 17%;
             right: 4%;
             width: 10%;
             height: 6%;
@@ -154,7 +154,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				<div class="header-main">
 					<div class="header-left">
 							<div class="logo-name">
-									 <a href="index.html"> <h1>Pharmassistant</h1>
+									 <a href="/home"> <h1>Pharmassistant</h1>
 									<!--<img id="logo" src="" alt="Logo"/>-->
 								  </a>
 							</div>
@@ -163,7 +163,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 							<div class="clearfix"> </div>
 						 </div>
 						 <div class="header-right">
-							<div class="profile_details_left"><!--notifications of menu start -->
+							<div class="profile_details_left" style="position: fixed; right: 4.5%"><!--notifications of menu start -->
+                                <a href="/signout" style="position: fixed; top: 4.7%; right: 1%; font-family: 'Ubuntu Light'; font-size: 110%; color: black">Sign Out</a>
 								<ul class="nofitications-dropdown" style="margin-left: 80%">
 									<li class="dropdown head-dpdn">
 										<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-bell"></i><span class="badge blue">3</span></a>
@@ -182,7 +183,6 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 											  <div class="clearfix"></div>
 											 </a></li>
 											 <li class="odd"><a href="#">
-												<div class="user_img"><img src="static/images/p6.png" alt=""></div>
 											   <div class="notification_desc">
 												<p>Lorem ipsum dolor</p>
 												<p><span>1 hour ago</span></p>
@@ -190,7 +190,6 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 											   <div class="clearfix"></div>
 											 </a></li>
 											 <li><a href="#">
-												<div class="user_img"><img src="static/images/p7.png" alt=""></div>
 											   <div class="notification_desc">
 												<p>Lorem ipsum dolor</p>
 												<p><span>1 hour ago</span></p>
@@ -213,21 +212,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 								<ul>
 									<li class="dropdown profile_details_drop">
 										<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-											<div class="profile_img">
-												<span class="prfil-img"><img src="static/images/p1.png" alt=""> </span>
-												<div class="user-name">
-													<p>Malorum</p>
-													<span>Administrator</span>
-												</div>
-												<i class="fa fa-angle-down lnr"></i>
-												<i class="fa fa-angle-up lnr"></i>
-												<div class="clearfix"></div>
-											</div>
 										</a>
 										<ul class="dropdown-menu drp-mnu">
-											<li> <a href="#"><i class="fa fa-cog"></i> Settings</a> </li>
-											<li> <a href="#"><i class="fa fa-user"></i> Profile</a> </li>
-											<li> <a href="#"><i class="fa fa-sign-out"></i> Logout</a> </li>
+											<li> <a href="/accounts"><i class="fa fa-cog"></i> Accounts</a> </li>
 										</ul>
 									</li>
 								</ul>
@@ -282,32 +269,76 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
         medList = {{ medList|tojson }}
 
+
+        var start=1;
+        var counter=0;
+
         function showMeds()
         {
             var table = document.getElementById("listbox");
-            for(var i=0;i<medList.length;i++)
+            for(var i=start;i<start+4;i++)
             {
-                med = medList[i].split("#");
+                if(i>medList.length)break;
+                med = medList[i-1].split("#");
                 var row = table.insertRow(-1);
-                var id = row.insertCell(0).innerHTML=med[0];
-                var name = row.insertCell(1).innerHTML=med[1];
-                var type = row.insertCell(2).innerHTML=med[2];
-                var com = row.insertCell(3).innerHTML=med[3];
-                var price = row.insertCell(4).innerHTML=med[4];
-                var quan = row.insertCell(5).innerHTML=med[5];
-                var date = row.insertCell(6).innerHTML=med[6];
-                var location = row.insertCell(7).innerHTML=med[7];
+                row.insertCell(0).innerHTML=med[0];
+                row.insertCell(1).innerHTML=med[1];
+                row.insertCell(2).innerHTML=med[2];
+                row.insertCell(3).innerHTML=med[3];
+                row.insertCell(4).innerHTML=med[4];
+                row.insertCell(5).innerHTML=med[5];
+                row.insertCell(6).innerHTML=med[6];
+                row.insertCell(7).innerHTML=med[7];
                 var imgEl = document.createElement('img');
                 imgEl.src = med[8];
-                imgEl.height=90;
-                imgEl.width=100;
-                var img = row.insertCell(8).appendChild(imgEl)
+                imgEl.height=85;
+                imgEl.width=95;
+                imgEl.style="margin-bottom: 5px";
+                if(i%4==1)imgEl.style="margin-top: 5px";
+                row.insertCell(8).appendChild(imgEl);
+                counter++;
             }
-        };
+        }
+
+        function left()
+        {
+            if(start-4<0)return;
+            var table = document.getElementById("listbox");
+            var rowCount = table.rows.length;
+            while(rowCount>1)
+            {
+                table.deleteRow(rowCount-1);
+                rowCount--;
+            }
+            start-=4;
+            document.getElementById("pageNum").innerHTML=(start)+" - "+(start+counter-1);
+            counter=0;
+            showMeds();
+        }
+
+        function right()
+        {
+            if(start+4>=medList.length)return;
+            var table = document.getElementById("listbox");
+            var rowCount = table.rows.length;
+            while(rowCount>1)
+            {
+                table.deleteRow(rowCount-1);
+                rowCount--;
+            }
+            start+=4;
+            document.getElementById("pageNum").innerHTML=(start)+" - "+(start+counter-1);
+            counter=0;
+            showMeds();
+        }
 
         window.onload = function WindowLoad(event)
         {
             showMeds();
+            if(medList.length==0)document.getElementById("pageNum").innerHTML="0";
+            else if(medList.length>=4)document.getElementById("pageNum").innerHTML="1 - 4";
+            else
+                document.getElementById("pageNum").innerHTML="1 - "+medList.length;
         };
 
         var searchKey = "";
@@ -346,32 +377,36 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			  </a> </div>
 		    <div class="menu">
 		      <ul id="menu" >
-		       <li id="menu-home" ><a href="/home"><i class="fa fa-tachometer"></i><span>Home</span></a></li>
-		         <li><a href="/notifications"><i class="fa fa glyphicon-asterisk"></i><span>Notifications</span></a></li>
+		       <li id="menu-home" ><a href="/home"><i class="fa fa-home"></i><span>Home</span></a></li>
+		         <li><a href="/notifications"><i class="fa fa-bell-o"></i><span>Notifications</span></a></li>
 
-                  <li id="menu-comunicacao" ><a href="/medicines"><i class="fa fa-book nav_icon"></i><span>Medicines</span><span class="fa fa-angle-right" style="float: right"></span></a>
+                  <li id="menu-comunicacao" ><a href="/medicines"><i class="fa fa-medkit"></i><span>Medicines</span><span class="fa fa-angle-right" style="float: right;"></span></a>
 		          <ul id="menu-comunicacao-sub" >
 		            <li id="menu-mensagens" style="width: 120px" ><a href="/medicines">Medicine List</a>
 		            </li>
 		            <li id="menu-arquivos" ><a href='/medicineListModify'>Add Medicine</a></li>
-		            <li id="menu-arquivos" ><a href="icons.html">Icons</a></li>
 		          </ul>
 		        </li>
-                <li><a href="#"><i class="fa fa-cog"></i>Company Lists</a></li>
+                <li><a href="/companies"><i class="fa fa-ambulance"></i><span>Medicine Companies</span><span class="fa fa-angle-right" style="float: right"></span></a>
+		          <ul>
+		            <li><a href="/companies">Company List</a></li>
+		            <li><a href="/addCompany">Register Company</a></li>
+		          </ul>
+		        </li>
 
-                  <li><a href="#"><i class="fa fa glyphicon-pencil"></i><span>Orders</span><span class="fa fa-angle-right" style="float: right"></span></a>
+                  <li><a href="/orders"><i class="fa fa-suitcase"></i><span>Orders</span><span class="fa fa-angle-right" style="float: right"></span></a>
 		          <ul>
 		            <li><a href="/orders">Order List</a></li>
 		            <li><a href="/orders/placeOrder">Place Order</a></li>
 		          </ul>
 		        </li>
-		          <li><a href="/makeReceipt"><i class="fa fa-map-marker"></i><span>Make Receipt</span></a></li>
+		          <li><a href="/makeReceipt"><i class="fa fa-calculator"></i><span>Make Receipt</span></a></li>
 
 		        </li>
 
-		        <li><a href="/finances"><i class="fa fa-bar-chart"></i><span>Finances</span></a></li>
-		        <li><a href="/accounts"><i class="fa fa-bar-chart"></i><span>Manage Accounts</span></a></li>
-                  <li><a href="/aboutUs"><i class="fa fa-envelope"></i><span>About Us</span></a>
+		        <li><a href="/finances"><i class="fa fa-dollar"></i><span>Finances</span></a></li>
+		        <li><a href="/accounts"><i class="fa fa-list-alt"></i><span>Manage Accounts</span></a></li>
+                  <li><a href="/aboutUs"><i class="fa fa-support"></i><span>About Us</span></a>
 
 		        </li>
 
@@ -410,10 +445,10 @@ $(".sidebar-icon").click(function() {
 <script src="static/js/bootstrap.js"> </script>
 <!-- mother grid end here-->
 
-    <input id="searchbox" type="text" style="position:fixed; top: 15%; left: 30%; width: 39%; height: 6%; font-family: 'Ubuntu Light';
+    <input id="searchbox" type="text" style="position:fixed; top: 17%; left: 30%; width: 39%; height: 6%; font-family: 'Ubuntu Light';
                                 font-size: 100%; border: 2px solid black; border-radius: 2px" placeholder=" Search for a medicine...">
 
-    <button id="menuSearchSubmit" onclick="search()" style="position: fixed; top: 15.2%; left: 66%;
+    <button id="menuSearchSubmit" onclick="search()" style="position: fixed; top: 17.2%; left: 66%;
                                                     background: transparent; border-color: transparent; outline: none">
             <img src="/static/Images/search.png" width="28" height="28">
         </button>
@@ -427,8 +462,8 @@ $(".sidebar-icon").click(function() {
     </button>
 
 
-    <div style="white-space: pre-line; position: fixed; top: 24%; left: 17%;
-     height: 70%; width: 80%; font-size: 100%; font-family: 'Ubuntu Light'; overflow: auto;">
+    <div style="white-space: pre-line; position: fixed; top: 26%; left: 17%;
+     height: 70%; width: 80%; font-size: 100%; font-family: 'Ubuntu Light';">
         <table id="listbox">
             <col style="width: 8.5%">
             <col style="width: 8.5%">
@@ -439,7 +474,7 @@ $(".sidebar-icon").click(function() {
             <col style="width: 8.5%">
             <col style="width: 8.5%">
             <col style="width: 8.5%">
-            <tr>
+            <tr style="border-bottom: 2px solid black">
                 <th>ID</th>
                 <th>Name</th>
                 <th>Type</th>
@@ -452,6 +487,10 @@ $(".sidebar-icon").click(function() {
             </tr>
         </table>
     </div>
+
+    <button id="left" onclick="left()" style="position: fixed; left: 47%; bottom: 1.5%; font-family: Ubuntu; font-size: 80%; background: transparent; border-color: transparent"><</button>
+    <p id="pageNum" style="position: fixed; left: 50%; bottom: 2%; font-family: Ubuntu; font-size: 80%"></p>
+    <button id="right" onclick="right()" style="position: fixed; left: 53%; bottom: 1.5%; font-family: Ubuntu; font-size: 80%; background: transparent; border-color: transparent">></button>
 
 </body>
 </html>

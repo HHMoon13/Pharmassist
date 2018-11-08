@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from Classes.Utilities import Iterator, Container
 from Classes import Statics
+from Classes.DatabaseHandlers import add, delete, create_table, update, addFactory
 
 class AccessDatabaseMedicines(Container.Container):
 
@@ -32,26 +33,30 @@ class AccessDatabaseMedicines(Container.Container):
                 self.index=0
 
         def add(self, toAdd):
-            temp=toAdd
-            #pass temp to a database management class method
+            addFactory.addFactory().add(create_table.Medicines, str(toAdd))
+            #addFactory.add hobe
 
         def remove(self, toBeRemove):
-            temp=toBeRemove
-            #pass temp to a database management class method
+            delete.Delete(create_table.Medicines, str(toBeRemove))
 
-        def update(self, medName, attribute, newValue):
-            temp=medName
+        def update(self, medID, attribute, newValue):
+            print(medID, attribute, newValue)
+            update.Update("<class 'Classes.DatabaseHandlers.create_table.Medicines'>", medID, attribute, newValue)
+            pass
             #dowork
 
         def search(self, toSearch):
-            result=""
+            result=[]
+            if toSearch=="":
+                result = "No Matches"
+                return result
             while self.hasNext():
                 temp1 = self.next()
                 temp2 = temp1.split("#")
                 for i in temp2:
                     if (i.capitalize()).__contains__((Statics.searchKey).capitalize()):
-                        result += temp1 + "*"
+                        result.append(temp1)
                         break
-            if result == "" or toSearch=="":
+            if result.__len__()==0:
                 result = "No Matches"
             return result

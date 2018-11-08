@@ -228,9 +228,16 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
             cell.appendChild(div);                   // append DIV to the table cell
         }
 
-        function showModal() {
-            $('#myModal').modal(options)
+        function restrictMinus(e) {
+                var inputKeyCode = e.keyCode ? e.keyCode : e.which;
+
+                if (inputKeyCode != null) {
+                    if (inputKeyCode < 48 && inputKeyCode != 46) e.preventDefault();
+                    if (inputKeyCode > 57) e.preventDefault();
+                }
         }
+
+
         function loadData() {
             orders = orderlist;
 
@@ -267,18 +274,110 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
              }
         }
 
-        $('#exampleModal').on('show.bs.modal', function (event) {
-          var button = $(event.relatedTarget);// Button that triggered the modal
-          var recipient = button.data('whatever'); // Extract info from data-* attributes
-          // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-          // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-         console.log(recipient);
-        console.log("sssss");
-          var modal = $(this);
 
-          modal.find('.modal-title').text('New message to ' + recipient);
-          modal.find('.modal-body input').val(recipient);
+        $(document).on('show.bs.modal','#exampleModal', function (event) {
+             var button = $(event.relatedTarget); // Button that triggered the modal
+              var id = button.data('whatever'); // Extract info from data-* attributes
+              // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+              // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+              var modal = $(this);
+            //var tbl = modal.find('.orderDetails');
+            order = JSON.parse(orderlist[id]);
+            orderid = order.orderID;
+            var tbl = document.getElementById('orderDetails');
+            for(var i = tbl.rows.length - 1; i > 0; i--)
+            {
+                tbl.deleteRow(i);
+            }
+            for (var i = 0; i < medOrderList.length; i++) {
+                mediorder = JSON.parse(medOrderList[i]);
+                var x = 1;
+                if(mediorder.order_id==orderid){
+                    var tbl = document.getElementById('orderDetails'),
+                    row = tbl.insertRow(x);     // append table row
+
+                    x++;
+                    createCell(row.insertCell(0), mediorder.medName, 'row');
+                    createCell(row.insertCell(1), mediorder.qty, 'row');
+                    createCell(row.insertCell(2), mediorder.cost, 'row');
+
+                }
+            }
+            document.getElementById("orderID").value = orderid;
+            document.getElementById("companyName").value = order.companyName;
+            document.getElementById("totalCost").value = order.totalCost;
+            document.getElementById("paid").value = order.paid;
+            document.getElementById("due").value = order.due;
+            document.getElementById("dueValue").value = order.due;
+
+            document.getElementById("status").value = order.status;
+
+            document.getElementById("hidden").value = id;
+            modal.find('.modal-title').text('Order details of order ' + orderid);
+             // modal.find('.modal-body input').val(id);
         })
+        
+        
+        function updateOrder() {
+
+
+            due = document.getElementById("due").value;
+            status = document.getElementById("status").value;
+            if(due > 0)
+            {
+                document.getElementById("paid").removeAttribute("disabled");
+                document.getElementById("save").style.display = "block";
+                document.getElementById("update").style.display = "none";
+            }
+            if(status == "false"){
+                document.getElementById("save").style.display = "block";
+                document.getElementById("update").style.display = "none";
+                document.getElementById("status").removeAttribute("disabled");
+            }
+
+        }
+
+        function saveOreder() {
+            var id  = document.getElementById("hidden").value;
+            total = document.getElementById("dueValue").value;
+            paid = document.getElementById("paid").value;
+            status = document.getElementById("status").value;
+
+
+            due = Number(total) - Number(paid);
+            if(due < 0)
+                due = 0;
+            order = JSON.parse(orderlist[id]);
+
+            order.paid = paid;
+            order.due = due;
+            order.status = status;
+
+            //var temp = JSON.stringify(order);
+            $.post("/updateOrder", order, function () {
+
+                });
+
+
+
+        }
+
+        function paidAmount() {
+            p = document.getElementById("paid").value;
+            total = document.getElementById("dueValue").value;
+            var due = Number(total) - Number(p);
+
+            if(due<=0)
+            {
+                due = Number(p) - total;
+                document.getElementById("due").value = String("0.00");
+
+            }
+            else {
+
+                document.getElementById("due").value = due;
+            }
+        }
 
     </script>
 
@@ -321,7 +420,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
         </table>
 </div>
 
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" action="/updateOrder" method="post" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -331,6 +430,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
         </button>
       </div>
       <div class="modal-body">
+
             <div class="form-group">
             <label for="orderID" class="col-form-label">Order ID:</label>
             <input type="text" class="form-control" id="orderID" disabled>
@@ -360,17 +460,27 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
           </div>
           <div class="form-group">
             <label for="paid" class="col-form-label">Paid Amount:</label>
-            <input class="form-control" id="paid" disabled>
+            <input type="text" onkeypress="restrictMinus(event);" class="form-control" id="paid" disabled  autocomplete="off" onkeyup="paidAmount()">
           </div>
             <div class="form-group">
             <label for="due" class="col-form-label">Due Amount:</label>
             <input class="form-control" id="due" disabled>
           </div>
+           <div class="form-group">
+            <label for="status" class="col-form-label">Status:</label>
+            <input class="form-control" id="status" disabled>
+          </div>
+          <div class="form-group">
+            <input class="form-control" id="hidden" disabled style="display:none;">
+            <input class="form-control" id="dueValue" disabled style="display:none;">
+          </div>
         </form>
       </div>
       <div class="modal-footer">
+        <button onclick="updateOrder()" id="update" type="button" class="btn btn-primary" style="display:block;">Update</button>
+        <button data-dismiss="modal" onclick="saveOreder()" id="save" type="button" class="btn btn-primary" style="display:none;">Save</button>
+
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Update</button>
       </div>
     </div>
   </div>

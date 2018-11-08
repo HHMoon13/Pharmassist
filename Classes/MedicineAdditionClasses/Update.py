@@ -6,4 +6,6 @@ class Update(op.Operation):
     def doOperation(self, msg):
         a = Iterator.Iterator
         a = adm.AccessDatabaseMedicines().getIterator()
-        a.update(msg)
+        toSend = msg.split("#")
+        print(toSend)
+        a.update(int(toSend[0]), toSend[1], toSend[2])

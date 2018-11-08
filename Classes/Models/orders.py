@@ -24,9 +24,17 @@ class Order(object):
                           + 'paid": "' + self.paid + '", "' \
                           + 'due": "' + self.due + '", "' \
                           + 'status": "' + self.status + '", "' \
-                          + 'orderDate": "'+self.orderDate+'", "' \
-                        + 'dueDate": "'+self.dueDate+'"}'
+                          + 'orderDate": "'+str(self.orderDate)+'", "' \
+                          + 'dueDate": "'+str(self.dueDate)+'"}'
         return jsonTypeString
+
+
+    def stringData(self):
+        data =  self.orderID + "#" + self.companyName + "#"+ str(self.totalCost) + "#" + str(self.paid) + "#" + str(self.due) +\
+                "#" + self.status + "#" + str(self.orderDate) + "#" + str(self.dueDate)
+
+        return data
+
 
 
 # ####

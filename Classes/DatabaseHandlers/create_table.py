@@ -35,7 +35,17 @@ class Medicines(Base):
     shelf = Column('shelf', String(50))
     image_link = Column('image_link', String(50))
 
+class OrdersList(Base):
+    __tablename__ = "ordersList"
 
+    order_id = Column('order_id', Integer, primary_key=True)
+    company_name = Column('company_name', String(50))
+    total_cost = Column('total_cost', Float)
+    paid_amount = Column('paid_amount', Float)
+    due_amount = Column('due_amount', Float)
+    status = Column('status', String(50))
+    order_date = Column('order_date', Date)
+    due_date = Column('due_date', Date)
 
 class Orders(Base):
         __tablename__ = "orders"
@@ -54,9 +64,13 @@ class Orders(Base):
 class Notifications(Base):
     __tablename__ = "notifications"
 
-    notification_id = Column('notification_id', Integer, primary_key=True)
-    notification = Column('notification', String(50))
-    time = Column('time', Time)
+    notificationID = Column('notificationID', Integer, primary_key=True)
+    type = Column('type', String(50))
+    notiString = Column('notiString', String(50))
+    medID = Column('medID', String(50))
+    medName = Column('medName', String(50))
+    medShelf = Column('medShelf', String(50))
+    status = Column('status', String(50))
 
 
 class Sellings(Base):
@@ -82,6 +96,7 @@ class Expenses(Base):
 
 
 # engine = sqlalchemy.create_engine('mysql+pymysql://root:1152104@localhost/pharmassistant')
+
 databaseInstance = SingletonDatabase.Database()
 engine = databaseInstance.engine
 Base.metadata.create_all(bind=engine)
