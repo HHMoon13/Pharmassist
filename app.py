@@ -1,11 +1,9 @@
 from flask import *
 
-from Classes.Notifications.NotificationGenerator import NotificationGenerator
-from Classes.Notifications.UnreadNotificationManager import UnreadNotificationManager
+
 from Classes.Utilities import Iterator
 from Classes.DatabaseAccessors import AccessDatabaseMedicines as adm, AccessDatabaseAccounts as ada, AccessDatabaseVendors as adv, AccessDatabaseExpenses as ade, AccessDatabaseSellings as ads
 from Classes import Statics
-from Classes.Notifications import MedicineList
 from Classes.Utilities import ResponseContext
 from Classes.AuthenticationResponses import OKState, WrongUsernameState, WrongPasswordState, InitialState
 from Classes.DecoratorPatternFiles.BaseMedicines import BaseMedicines
@@ -338,12 +336,15 @@ def receive_orderData():
 @app.route('/orders/placeOrder', methods=['POST'])
 def placeOrderPage():
     v = companyList.CompanyList()
-    m = MedicineList.MedicineList()
-
+    from Classes.Notifications.MedicineDEPO import MedicineDEPO
+    m = MedicineDEPO()
+    medList = m.getAllMedicines()
+    JSONableMedList = []
+    for med in medList:
+        JSONableMedList.append(med.__str__())
     # v.printList()
     print(v.vendorsList())
-    print(m.mediList())
-    return render_template('placeOrder.html', vendorslist=v.vendorsList(), medList=m.mediList())
+    return render_template('placeOrder.html', vendorslist=v.vendorsList(), medList=JSONableMedList)
 
 
 @app.route('/addreceipt', methods=['POST'])
@@ -394,16 +395,7 @@ def foo():
 
 @app.route('/tt')
 def testDemo():
-    s= []
-    s.append("a")
-    s.append("b")
-    n = NotificationGenerator()
-    u = UnreadNotificationManager(n)
-    n.generateEmptyNotification(medID=1,medName="napa",medShelf="22A",notiID=1)
-
-    print(UnreadNotificationManager.unreadCount)
-
-    return render_template("demo.html",newNotifications = UnreadNotificationManager.unreadCount,s=UnreadNotificationManager.unreadNotis)
+    return 'ok'
 
 if __name__ == '__main__':
     app.run()
