@@ -152,7 +152,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 							<div class="clearfix"> </div>
 						 </div>
 						 <div class="header-right">
-							<div class="profile_details_left"><!--notifications of menu start -->
+							<div class="profile_details_left" style="position: fixed; right: 4.5%"><!--notifications of menu start -->
+                                <a href="/signout" style="position: fixed; top: 4.7%; right: 1%; font-family: 'Ubuntu Light'; font-size: 110%; color: black">Sign Out</a>
 								<ul class="nofitications-dropdown" style="margin-left: 80%">
 									<li class="dropdown head-dpdn">
 										<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-bell"></i><span class="badge blue">3</span></a>
@@ -202,16 +203,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 								<ul>
 									<li class="dropdown profile_details_drop">
 										<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-											<div class="profile_img">
-												<span class="prfil-img"><img src="static/images/p1.png" alt=""> </span>
-												<div class="user-name">
-													<p>Malorum</p>
-													<span>Administrator</span>
-												</div>
-												<i class="fa fa-angle-down lnr"></i>
-												<i class="fa fa-angle-up lnr"></i>
-												<div class="clearfix"></div>
-											</div>
+
 										</a>
 										<ul class="dropdown-menu drp-mnu">
 											<li> <a href="#"><i class="fa fa-cog"></i> Settings</a> </li>
@@ -296,37 +288,36 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			  </a> </div>
 		    <div class="menu">
 		      <ul id="menu" >
-		       <li id="menu-home" ><a href="/home"><i class="fa fa-tachometer"></i><span>Home</span></a></li>
-		         <li><a href="/notifications"><i class="fa fa glyphicon-asterisk"></i><span>Notifications</span></a></li>
+		       <li id="menu-home" ><a href="/home"><i class="fa fa-home"></i><span>Home</span></a></li>
+		         <li><a href="/notifications"><i class="fa fa-bell-o"></i><span>Notifications</span></a></li>
 
-                  <li id="menu-comunicacao" ><a href="/medicines"><i class="fa fa-book nav_icon"></i><span>Medicines</span><span class="fa fa-angle-right" style="float: right"></span></a>
+                  <li id="menu-comunicacao" ><a href="/medicines"><i class="fa fa-medkit"></i><span>Medicines</span><span class="fa fa-angle-right" style="float: right;"></span></a>
 		          <ul id="menu-comunicacao-sub" >
 		            <li id="menu-mensagens" style="width: 120px" ><a href="/medicines">Medicine List</a>
 		            </li>
 		            <li id="menu-arquivos" ><a href='/medicineListModify'>Add Medicine</a></li>
-		            <li id="menu-arquivos" ><a href="icons.html">Icons</a></li>
 		          </ul>
 		        </li>
-                  <li><a href="#"><i class="fa fa glyphicon-pencil"></i><span>Medicine Companies</span><span class="fa fa-angle-right" style="float: right"></span></a>
+                <li><a href="/companies"><i class="fa fa-ambulance"></i><span>Medicine Companies</span><span class="fa fa-angle-right" style="float: right"></span></a>
 		          <ul>
 		            <li><a href="/companies">Company List</a></li>
 		            <li><a href="/addCompany">Register Company</a></li>
 		          </ul>
 		        </li>
 
-                  <li><a href=""><i class="fa fa glyphicon-pencil"></i><span>Orders</span><span class="fa fa-angle-right" style="float: right"></span></a>
+                  <li><a href="/orders"><i class="fa fa-suitcase"></i><span>Orders</span><span class="fa fa-angle-right" style="float: right"></span></a>
 		          <ul>
 		            <li><a href="/orders">Order List</a></li>
 		            <li><a href="/orders/placeOrder">Place Order</a></li>
 		          </ul>
 		        </li>
-		          <li><a href="/makeReceipt"><i class="fa fa-map-marker"></i><span>Make Receipt</span></a></li>
+		          <li><a href="/makeReceipt"><i class="fa fa-calculator"></i><span>Make Receipt</span></a></li>
 
 		        </li>
 
-		        <li><a href="/finances"><i class="fa fa-bar-chart"></i><span>Finances</span></a></li>
-		        <li><a href="/accounts"><i class="fa fa-bar-chart"></i><span>Manage Accounts</span></a></li>
-                  <li><a href="/aboutUs"><i class="fa fa-envelope"></i><span>About Us</span></a>
+		        <li><a href="/finances"><i class="fa fa-dollar"></i><span>Finances</span></a></li>
+		        <li><a href="/accounts"><i class="fa fa-list-alt"></i><span>Manage Accounts</span></a></li>
+                  <li><a href="/aboutUs"><i class="fa fa-support"></i><span>About Us</span></a>
 
 		        </li>
 

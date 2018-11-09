@@ -3,7 +3,8 @@ from Classes import Statics
 
 class medOrder(object) :
 
-    def __init__(self,orderID,order_id,venID,companyName,medName,dueDate,qty,cost,status):
+    def __init__(self,orderID,order_id,venID,companyName,medName,qty,dueDate,status,cost):
+
         self.order_id = order_id
         self.venID = venID
         self.cost = cost
@@ -20,9 +21,9 @@ class medOrder(object) :
                          + 'venID": "' + self.venID + '", "' \
                          + 'companyName": "' + self.companyName + '", "' \
                          + 'medName": "' + self.medName + '", "' \
-                         + 'qty": "' + self.qty + '", "' \
-                         + 'dueDate": "' + self.dueDate + '", "'\
-                         + 'status": "' + self.status + '", "' \
+                         + 'qty": "' + str(self.qty) + '", "' \
+                         + 'dueDate": "' + str(self.dueDate) + '", "'\
+                         + 'status": "' + str(self.status) + '", "' \
                          + 'cost": "' + self.cost + '"}'
 
         return jsonTypeString
@@ -51,3 +52,10 @@ class medOrder(object) :
             #  "\"" +str(item.venID) + "\" : "+         "\"items\" : "
 
         return list
+
+    #orderID,order_id,venID,companyName,medName,qty,dueDate,status,cost):
+    def stringData(self):
+        data =  str(self.orderID) + "#" + self.order_id + "#"+ self.venID + "#" + self.companyName + "#" + self.medName +\
+                "#" + str(self.qty) + "#" + str(self.dueDate) + "#" + self.status + "#" + str(self.cost)
+
+        return data

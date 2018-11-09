@@ -1,11 +1,11 @@
-from Classes.Models.hashedNotification import HashFormatNotification
+from Classes.Models.HashNotification import HashNotification
 from Classes.Models.notification import Notification
 
 
-class NotificationAdapter(HashFormatNotification):
+class HashNotiAdapter(HashNotification):
 
-    def __init__(self, notificationData):
-        self.notificationData = notificationData
+    def __init__(self, notiObj):
+        self.notificationData = notiObj
 
     def getNotificationMsg(self):
         hashed = ""

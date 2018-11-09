@@ -5,6 +5,7 @@ from Classes.DatabaseHandlers.AddOrders import AddOrders
 from Classes.DatabaseHandlers.AddSellings import AddSellings
 from Classes.DatabaseHandlers.AddUsers import *
 from Classes.DatabaseHandlers.AddVendors import AddVendors
+from Classes.DatabaseHandlers.AddOrdersList import AddOrdersList
 
 
 class Factory:
@@ -17,11 +18,12 @@ class Factory:
             return AddMedicines()
         elif string == "<class 'Classes.DatabaseHandlers.create_table.Orders'>":
             return AddOrders()
+        elif string == "<class 'Classes.DatabaseHandlers.create_table.OrdersList'>":
+            return AddOrdersList()
         elif string == "<class 'Classes.DatabaseHandlers.create_table.Notifications'>":
             return AddNotifications()
         elif string == "<class 'Classes.DatabaseHandlers.create_table.Sellings'>":
             return AddSellings()
         elif string == "<class 'Classes.DatabaseHandlers.create_table.Expenses'>":
             return AddExpenses()
-
 

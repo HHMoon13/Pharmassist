@@ -21,13 +21,14 @@ class AddMedicines(Classes.DatabaseHandlers.addPattern.addPattern):
     def add(self, list):
         sp = list.split('#')
         user = Classes.DatabaseHandlers.create_table.Medicines()
-        user.company_name = sp[1]
-        user.medicine_name = sp[2]
-        user.medicine_type = sp[3]
-        user.shelf = sp[4]
-        user.image_link = sp[5]
-        user.quantity = sp[6]
-        user.price = sp[7]
-        user.expiry_date = sp[8]
+        user.medicine_id = sp[0]
+        user.company_name = sp[3]
+        user.medicine_name = sp[1]
+        user.medicine_type = sp[2]
+        user.shelf = sp[7]
+        user.image_link = sp[8]
+        user.quantity = sp[5]
+        user.price = sp[4]
+        user.expiry_date = sp[6]
         session.add(user)
         session.commit()

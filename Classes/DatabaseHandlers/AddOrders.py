@@ -30,11 +30,3 @@ class AddOrders(Classes.DatabaseHandlers.addPattern.addPattern):
         user.cost = sp[8]
         session.add(user)
         session.commit()
-
-        prev_i = 1
-        users = session.query(Classes.DatabaseHandlers.create_table.Orders).all()
-        for i in users:
-            needed_id = max(i.id, prev_i)
-            prev_i = i.id
-
-        Classes.Statics.munia_order_id = str(needed_id)

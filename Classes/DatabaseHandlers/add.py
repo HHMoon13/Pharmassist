@@ -38,15 +38,17 @@ def Add(table, list):
 
 
     elif s == "<class 'create_table.Medicines'>":
+        print(sp)
         user = create_table.Medicines()
-        user.company_name = sp[1]
-        user.medicine_name = sp[2]
-        user.medicine_type = sp[3]
-        user.shelf = sp[4]
-        user.image_link = sp[5]
-        user.quantity = sp[6]
-        user.price = sp[7]
-        user.expiry_date = sp[8]
+        user.medicine_id=sp[0]
+        user.company_name = sp[3]
+        user.medicine_name = sp[1]
+        user.medicine_type = sp[2]
+        user.shelf = sp[7]
+        user.image_link = sp[8]
+        user.quantity = sp[5]
+        user.price = sp[4]
+        user.expiry_date = sp[6]
         session.add(user)
         session.commit()
 
@@ -93,6 +95,14 @@ def Add(table, list):
         session.commit()
 
 
-addList = '1#Square#Saline#gu#C##7#110.986#2011-10-27'
-Add(create_table.Medicines, addList)
+    userList = []
+    vendorList = []
+    medList = []
+    notificationList = []
+    orderList = []
+    sellList = []
+    expenseList = []
+
+    fetch.Fetch()
+
 session.close()

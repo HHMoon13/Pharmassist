@@ -18,8 +18,11 @@ session = Session()
 
 
 class addFactory:
+
     def add(self, table, list):
+
         s = str(table)
+
         a = Classes.DatabaseHandlers.Factory
         b = a.Factory.getClass('', s)
         b.add(list)

@@ -1,10 +1,11 @@
+import os
 from flask import *
 
 from Classes.Notifications.NotificationGenerator import NotificationGenerator
 from Classes.Notifications.NotificationPageManager import NotificationPageManager
 from Classes.Notifications.UnreadNotificationManager import UnreadNotificationManager
 from Classes.Utilities import Iterator
-from Classes.DatabaseAccessors import AccessDatabaseMedicines as adm, AccessDatabaseAccounts as ada, AccessDatabaseVendors as adv
+from Classes.DatabaseAccessors import AccessDatabaseMedicines as adm, AccessDatabaseAccounts as ada, AccessDatabaseVendors as adv, AccessDatabaseExpenses as ade, AccessDatabaseSellings as ads
 from Classes import Statics
 import Classes.DatabaseHandlers.fetch
 from Classes.Notifications import MedicineList
@@ -13,13 +14,33 @@ from Classes.ManageOrders import CompanyList as companyList
 from Classes.ManageOrders import medOrderList as medOrderList
 from Classes.ManageOrders import OrderList as OrderList
 from Classes.Utilities import OperationFactory
+from Classes.Utilities import ResponseContext, ResponseState as Response
+from Classes.AuthenticationResponses import OKState, WrongUsernameState, WrongPasswordState, InitialState
+from Classes.DecoratorPatternFiles.BaseMedicines import BaseMedicines
+from Classes.DecoratorPatternFiles.DecoratorMedicine import DecoratorMedicine
+from Classes.Models import medOrders
+from Classes.ManageOrders import CompanyList as companyList
+from Classes.ManageOrders import medOrderList as medOrderList
+from Classes.ManageOrders.makeOrder import makeOrder
+from Classes.ManageOrders import OrderList as OrderList
+from Classes.Utilities import OperationFactory
+import json
+
+
+
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
+
 
 app = Flask(__name__)
 
+r0 = InitialState.InitialState()
+rc = ResponseContext.ResponseContext(r0)
+rc.respondToState("", "")
 
 @app.route('/')
 def startupPage():
     response=Statics.authMessage
+    print(response)
     return render_template('signInPage.html', response=response)
 
 @app.route('/home')
@@ -31,9 +52,33 @@ def homepage():
 def aboutUsPage():
     return render_template('aboutUsPage.html')
 
-@app.route('/finances')
+@app.route('/finances', methods=['GET', 'POST'])
 def financesPage():
-    return render_template('finances.html')
+    sellList = []
+    a = Iterator.Iterator
+    a = ads.AccessDatabaseSellings().getIterator()
+    while a.hasNext():
+        sellList.append(a.next())
+    expenseList = []
+    b = Iterator.Iterator
+    b = ade.AccessDatabaseExpenses().getIterator()
+    while a.hasNext():
+        expenseList.append(b.next())
+    return render_template('finances.html', sellList=sellList, expenseList=expenseList)
+
+@app.route('/finances_second', methods=['GET', 'POST'])
+def finances_secondPage():
+    sellList = []
+    a = Iterator.Iterator
+    a = ads.AccessDatabaseSellings().getIterator()
+    while a.hasNext():
+        sellList.append(a.next())
+    expenseList = []
+    b = Iterator.Iterator
+    b = ade.AccessDatabaseExpenses().getIterator()
+    while a.hasNext():
+        expenseList.append(b.next())
+    return render_template('finances_second.html', sellList=sellList, expenseList=expenseList)
 
 @app.route('/makeReceipt')
 def makeReceiptPage():
@@ -54,7 +99,7 @@ def medicinesPage():
         medList.append(a.next())
     return render_template('medicines.html', medList=medList)
 
-@app.route('/medicineListModify')
+@app.route('/medicineListModify', methods=['POST', 'GET'])
 def medListModifyPage():
     medList = []
     a = Iterator.Iterator
@@ -138,16 +183,19 @@ def resultsPage():
     Statics.searchResult=""
     a = Iterator.Iterator
     a = adm.AccessDatabaseMedicines().getIterator()
-    searched = a.search(Statics.searchKey)
-    return render_template('searchResults.html', searched = searched)
+    searchResults = a.search(Statics.searchKey)
+    print(searchResults)
+    return render_template('searchResults.html', searchResults = searchResults)
 
 
 @app.route('/searchHandler', methods=['POST'])
 def search():
     Statics.searchKey=""
     searchRequest = request.get_json(force=True)
+    print(searchRequest)
     for i in searchRequest:
         Statics.searchKey += str(i['queried'])
+    return 'OK'
 
 @app.route('/medChange', methods=['POST'])
 def medChange():
@@ -157,7 +205,9 @@ def medChange():
     a = adm.AccessDatabaseMedicines().getIterator()
     for i in changeRequest:
         temp += str(i['change'])
-    opF = OperationFactory.OperationFactory().executeOperation(temp)
+    opF = OperationFactory.OperationFactory().getOperation(temp)
+    opF.doOperation(Statics.medicineOperation)
+    return 'OK'
 
 
 @app.route('/authCheck', methods=['POST'])
@@ -167,51 +217,123 @@ def update():
     temp=""
     for i in currentUser:
         temp+=str(i['userpass'])
-    b = temp.split("#")
-    username=b[0]
-    password=b[1]
+    receivedData = temp.split("#")
+    username=receivedData[0]
+    password=receivedData[1]
     userList = []
     a = Iterator.Iterator
     a = ada.AccessDatabaseAccounts().getIterator()
     while a.hasNext():
         userList.append(a.next())
 
-    isValid=False
+    isUsernameValid=False
+
+    r0 = InitialState.InitialState()
+    r1 = OKState.OKState()
+    r2 = WrongPasswordState.WrongPasswordState()
+    r3 = WrongUsernameState.WrongUsernameState()
+
+    rc = ResponseContext.ResponseContext(r0)
+    rc.respondToState("", "")
 
     #id, username, password, fullname, usertype
 
     for i in userList:
         temp2 = i.split("#")
+        userType = temp2[4]
         if temp2[1]==username and temp2[2]==password:
-            Statics.authMessage="OK"
-            Statics.currentUser=username
-            Statics.currentUserType=temp2[4]
-            isValid=True
+            rc.setState(r1)
+            rc.respondToState(username, userType)
+            isUsernameValid=True
             break
         if temp2[1]==username and temp2[2]!=password:
-            Statics.authMessage="Wrong Password"
-            isValid=True
+            rc.setState(r2)
+            rc.respondToState(username, userType)
+            isUsernameValid=True
             break
 
-    if isValid==False:
-        Statics.authMessage="Wrong Username"
+    if isUsernameValid==False:
+        rc.setState(r3)
+        rc.respondToState(username, "")
 
     response=Statics.authMessage
     print(response)
     return render_template('signInPage.html', response=response)
+
+@app.route('/signout')
+def signout():
+    r0 = InitialState.InitialState()
+    rc = ResponseContext.ResponseContext(r0)
+    rc.respondToState("", "")
+    print(Statics.authMessage)
+    print("Signed Out")
+    return redirect("/", 302)
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+@app.route('/imageUpload', methods=['POST', 'GET'])
+def upload_file():
+    if request.method == 'POST':
+        file = request.files['file']
+        if file and allowed_file(file.filename):
+            filename = file.filename
+            file.save(app.root_path+"/static/Images/"+filename)
+            Statics.imageLink='/static/Images/'+filename
+    return 'OK'
 
 #
 @app.route('/orders')
 def ordersPage():
     order = OrderList.OrderList()
     mediOrder = medOrderList.medOrderList()
+    #order.mapOrder()
     return render_template('orders.html',orderlist = order.get_ordersList(),medOrderList = mediOrder.get_medordersList())
 
 @app.route('/munia', methods=['POST' ])
 def receive_munia():
     if request.method == 'POST':
         print(request.form)
+        data= request.form
+        print(data)
+        paid = data['paid']
+        makeOrder.generateOrder(data)
+        print(paid)
+        return redirect('/orders')
+
+@app.route('/updateOrder', methods=['POST' ])
+def update_order():
+    if request.method == 'POST':
+        data = request.form
+        print(data)
+        print(data['orderID'])
+        makeOrder.updateOrder(data)
+
         return ordersPage()
+
+
+@app.route('/recieveCompanyName', methods=['POST'] )
+def recieve_companyName():
+    if request.method == 'POST':
+        data = request.get_json(force=True)
+        print(len(data))
+
+        makeOrder.setCompanyName(data["companyName"])
+        return ordersPage()
+
+@app.route('/recieveMedOrders', methods=['POST'])
+def receive_orderData():
+    if request.method == 'POST':
+        data = request.get_json(force=True)
+        print(data)
+        res = makeOrder.addItem(data)
+        print(res)
+        return str(res)
+       # orderID, order_id, venID, companyName, medName, qty, dueDate, status, cost)
+        #print(request.form)
+    return ordersPage()
+
 
 @app.route('/orders/placeOrder', methods=['POST'])
 def placeOrderPage():
@@ -226,14 +348,37 @@ def placeOrderPage():
 
 @app.route('/addreceipt', methods=['POST'])
 def receipt():
-    temp =request.form['mydata']
-    Statics.currentReceipt=temp
-    x=temp.split("#")
+   # temp =request.form['mydata']
+
+   if request.method == "POST":
+       temp = request.form["mydata"]
+       list = temp.split("#")
+       if temp == "":
+           return "0"
+       print(temp)
+       print(list)
+
+
+       cnt = 0
+       for i in list:
+           x = i.split("*")
+           if cnt == 0:
+               m = BaseMedicines(x[2], x[4])
+           else:
+               m = DecoratorMedicine(m, x[2], x[4])
+           cnt = cnt + 1
+
+
+
+       result = m.get_cost()
+       print(str(result))
+       return str(result)
+    #Statics.currentReceipt=temp
+    #x=temp.split("#")
     #here the values to be inserted in table sellings are in this form - Money*Date*Item*CashierName*Quantity in the x array
     #Date is in YYYY-MM-DD format
-    print(x)
-
-@app.route('/t')
+    #print(x)
+@app.route('/testing')
 def testpage():
     notiPage = NotificationPageManager()
     notiPage.showAllNotifications()

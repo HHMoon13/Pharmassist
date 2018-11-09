@@ -1,4 +1,5 @@
 <!--Author: W3layouts
+<!--Author: W3layouts
 Author URL: http://w3layouts.com
 License: Creative Commons Attribution 3.0 Unported
 License URL: http://creativecommons.org/licenses/by/3.0/
@@ -254,8 +255,17 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
         mediList = {{ medList|tojson}};
         selectedMediList = [];
 
+
+
+
+
         var orderData = "003#";
+        var medorder = {};
+        var newMedorder = {};
+        medorder["order_id"] = "003";
+
         var orderList = [];
+        var medOrderList = [];
         function loadData() {
             let today = new Date().toISOString().substr(0, 10);
             document.querySelector("#today").value = today;
@@ -288,10 +298,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
             }
             document.getElementById("companyName").innerHTML = html;
 
-
-
-
         }
+
         var selectCompany = false;
         function setCompany(event) {
                 //alert(this.options[this.selectedIndex].text);
@@ -300,6 +308,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                 if(val != -1){
                     selectCompany = true;
                     var cName = this.options[this.selectedIndex].text;
+                    document.getElementById("companyName").disabled = true;
+                    sendCompanyName(cName);
                     obj = vendorList;
                     for (var i = 0; i < vendorList.length; i++){
                         vendor = JSON.parse(vendorList[i]);
@@ -307,7 +317,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                          if (vendor.name == cName){
                              console.log(vendor.contact);
                              document.getElementById("clientContact").value = vendor.contact;
-                             orderData += vendor.venID;
+
+
                              orderData += Math.floor((Math.random() * 100) + 1); //orderID
                              orderData += "#";
                              orderData += vendor.venID;   //venID
@@ -315,8 +326,15 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                              orderData += vendor.name;  //company name
                              orderData += "#"
 
+                             medorder["venID"] = vendor.venID;
+                             medorder["orderID"] = Math.floor((Math.random() * 100) + 1);
+                             medorder["companyName"] = vendor.name;
+
+
                          }
                     }
+
+
 
                     html2 = '<option value=" ' + '-1" '+ '>~~SELECT~~</option>';
                     //obj2 = medList;
@@ -335,7 +353,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
         }
 
         var selectMedicine = false;
-        function setMedicine(event) {
+          function setMedicine(event) {
             console.log(this.options[this.selectedIndex].value);
             var val = this.options[this.selectedIndex].value;
             if (val != -1) {
@@ -347,7 +365,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
                     if (medicine.name == cName) {
                         console.log(medicine.name)
-                        document.getElementById("rate").value = medicine.price;
+                        document.getElementById("rate").value = Number(medicine.price) * 0.8;
+                        document.getElementById("stock").value = medicine.qty;
                     }
                 }
             }
@@ -376,8 +395,41 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
             }
             document.getElementById("grandTotal").value = total;
+
+
         }
 
+        function sendCompanyName(cName) {
+            var temp = JSON.stringify({"companyName" : cName});
+            $.post("/recieveCompanyName", temp, function () {
+                });
+        }
+
+        function sendData() {
+           /* console.log(orderList);
+
+                orders = [{"order": ""+orderList}];
+                var temp = JSON.stringify(orders);
+                $.post("/munia", temp, function () {
+                    console.log("muniaaaaaaaaaaaaaa")
+                });
+            console.log("lllllllllllllllll");
+            //window.open('/orders');   */
+            var temp = JSON.stringify(newMedorder);
+            var xmlhttp = new XMLHttpRequest();   // new HttpRequest instance
+            xmlhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                   // Typical action to be performed when the document is ready:
+                   document.getElementById("grandTotal").value = xmlhttp.responseText;
+                }
+            };
+            xmlhttp.open("POST", "/recieveMedOrders");
+            xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            xmlhttp.send(temp);
+            //$.post("/recieveMedOrders", temp, function () {
+              //  });
+
+        }
 
         function createCell(cell, text, style) {
             var div = document.createElement('div'), // create DIV element
@@ -396,7 +448,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
             }
             else {
 
-                var JSONObj = {};
+
                 var tbl = document.getElementById('orderTable'), // table reference
                 row = tbl.insertRow(tbl.rows.length),      // append table row
                 i;
@@ -437,14 +489,27 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                 addorder += t;
 
                 orderList.push(addorder);
-                calculate();
+               // calculate();
+
+                newMedorder = medorder;
+                newMedorder["medName"] = m.name;
+                newMedorder["qty"] = s;
+                newMedorder["dueDate"] = duedate;
+                newMedorder["status"] = "false";
+                newMedorder["cost"] =  t;
+
+                medOrderList.push(newMedorder);
+                sendData();
             }
 
         }
 
+
+
         function paidAmount() {
+            total = document.getElementById("grandTotal").value;
             p = document.getElementById("paid").value;
-            var due = total - Number(p);
+            var due = Number(total) - Number(p);
 
             if(due<=0)
             {
@@ -456,22 +521,21 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
             else {
 
                 document.getElementById("due").value = due;
+                document.getElementById("exchange").value = "0.00";
             }
         }
 
 
-        function sendData() {
-            console.log(orderList);
+        function restrictMinus(e) {
+                var inputKeyCode = e.keyCode ? e.keyCode : e.which;
 
-                orders = [{"order": ""+orderList}];
-                var temp = JSON.stringify(orders);
-                $.post("/munia", temp, function () {
-                    console.log("muniaaaaaaaaaaaaaa")
-                });
-            console.log("lllllllllllllllll");
-            //window.open('/orders');
-
+                if (inputKeyCode != null) {
+                    if (inputKeyCode < 48 && inputKeyCode != 46) e.preventDefault();
+                    if (inputKeyCode > 57) e.preventDefault();
+                }
         }
+
+
 
 
 
@@ -516,10 +580,16 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                 </div>
 			  </div> <!--/form-group-->
             <div class="form-group">
-			    <label for="clientContact" class="col-sm-2 control-label">Rate</label>
+			    <label for="rate" class="col-sm-2 control-label">Rate</label>
 			    <div class="col-sm-3">
 			      <input type="text" class="form-control" id="rate" name="rate" disabled="true" />
 			    </div>
+
+                <label for="stock" class="col-sm-2 control-label">Stock</label>
+			    <div class="col-sm-3">
+			      <input type="text" class="form-control" id="stock" name="stock" disabled="true" />
+			    </div>
+
             </div> <!--/form-group-->
 
              <div class="form-group">
@@ -541,12 +611,12 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                 </div>
             </div>
             </div>
-        <div class="col-sm-offset-2 col-sm-10">
+        <div class="col-sm-offset-2 col-sm-6">
              <button type="button" class="btn btn-default" onclick="addRow()" id="addRowBtn" data-loading-text="Loading..."> <i class="glyphicon glyphicon-plus-sign"></i> Add </button>
         </div>
-
-			  <table class="table" id="orderTable">
-			  	<thead>
+            <div class="tab-content tab-content-in"">
+			  <table class="table fa-border" id="orderTable">
+			  	<thead class="thead-dark">
 			  		<tr>
 			  			<th style="width:30%;">Product</th>
 			  			<th style="width:20%;">Rate</th>
@@ -560,6 +630,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
 
 			  </table>
+            </div>
 
 			  <div class="col-md-6">
 
@@ -576,14 +647,26 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				    <label for="grandTotal" class="col-sm-3 control-label">Grand Total</label>
 				    <div class="col-sm-9">
 				      <input type="text" class="form-control" id="grandTotal" name="grandTotal" disabled="true" />
-				    </div>
+				      <input type="hidden" class="form-control" id="grandTotal" name="grandTotal" />
+                    </div>
 				  </div> <!--/form-group-->
 
+                  <div class="form-group">
+				    <label for="clientContact" class="col-sm-3 control-label">Payment Status</label>
+				    <div class="col-sm-9">
+				      <select class="form-control" name="paymentStatus" id="paymentStatus">
+				      	<option value="">~~SELECT~~</option>
+				      	<option value="1">Full Payment</option>
+				      	<option value="2">Advance Payment</option>
+				      	<option value="3">No Payment</option>
+				      </select>
+				    </div>
+				  </div> <!--/form-group-->
 
                   <div class="form-group">
 				    <label for="paid" class="col-sm-3 control-label">Paid Amount</label>
 				    <div class="col-sm-9">
-				      <input type="text" class="form-control" id="paid" name="paid" autocomplete="off" onkeyup="paidAmount()" />
+				      <input type="text" class="form-control" id="paid" name="paid" onkeypress="restrictMinus(event);" autocomplete="off" onkeyup="paidAmount()" />
 				    </div>
 				  </div> <!--/form-group-->
 				  <div class="form-group">
@@ -602,17 +685,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				    </div>
 				  </div> <!--/form-group-->
 
-				  <div class="form-group">
-				    <label for="clientContact" class="col-sm-3 control-label">Payment Status</label>
-				    <div class="col-sm-9">
-				      <select class="form-control" name="paymentStatus" id="paymentStatus">
-				      	<option value="">~~SELECT~~</option>
-				      	<option value="1">Full Payment</option>
-				      	<option value="2">Advance Payment</option>
-				      	<option value="3">No Payment</option>
-				      </select>
-				    </div>
-				  </div> <!--/form-group-->
+
 
                   <div class="form-group">
                     <label for="dueDate" class="col-sm-3 control-label">Due Date</label>

@@ -1,4 +1,5 @@
 #from Classes.Notifications.Observable import Observable
+from Classes import Statics
 from Classes.Models.vendors import Vendor
 import json
 import datetime
@@ -13,18 +14,20 @@ class CompanyList(object):
 
     def createVendorsList(self):
 
-        vendors = [] #list of objects, will be collected from database
-        v1 = Vendor("v001", "Square", "01XXXXXXXX")
-        v2 = Vendor("v002", "Beximco Pharma Limited", "01XXXXXXXX")
-        v3 = Vendor("v003", "Incepta Pharma Limited", "01XXXXXXXX")
-        v4 = Vendor("v004", "Aristopharma Limited", "01XXXXXXXX")
 
-        vendors.append(v1)
-        vendors.append(v2)
-        vendors.append(v3)
-        vendors.append(v4)
+        vendors = []
+        vendorsList = Statics.vendorList  # [] #list of objects, will be collected from database
+
+        for item in vendorsList:
+            #print(item)
+
+            sp = str(item).split('#')
+            print(len(sp))
+            m = Vendor(sp[0], sp[1], sp[2])
+            vendors.append(m)
 
         return vendors
+
 
     def vendorsList(self):
         list = []

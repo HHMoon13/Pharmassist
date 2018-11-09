@@ -21,6 +21,7 @@ notificationList = Classes.Statics.notificationList
 orderList = Classes.Statics.orderList
 sellList = Classes.Statics.sellList
 expenseList = Classes.Statics.expenseList
+orderlistList = Classes.Statics.orderlistList
 
 
 def Fetch():
@@ -51,17 +52,17 @@ def Fetch():
 
     users = session.query(Classes.DatabaseHandlers.create_table.Notifications).all()
     for user in users:
-            m = str(user.notificationID)
-            s = m + '#' + user.type + '#' + user.notiString + '#' + user.medID + '#' + user.medName + '#' + user.medShelf + '#' + user.status
-            notificationList.append(s)
+        m = str(user.notification_id)
+        s = m + '#' + user.notification + '#' + str(user.time)
+        notificationList.append(s)
     print(notificationList)
 
     users = session.query(Classes.DatabaseHandlers.create_table.Orders).all()
     for user in users:
             m = str(user.id)
-            s = m + '#' + user.order_id + '#' + str(user.vendor_id) + '#' + user.company_name + '#' + user.medicine + '#' + str(user.quantity) + '#' + str(user.due_date) + '#' + str(user.status) + '#' + str(user.cost)
+            s = m + '#' + str(user.order_id) + '#' + str(user.vendor_id) + '#' + user.company_name + '#' + user.medicine + '#' + str(user.quantity) + '#' + str(user.due_date) + '#' + str(user.status) + '#' + str(user.cost)
             orderList.append(s)
-    print(orderList)
+            print(orderList)
 
     users = session.query(Classes.DatabaseHandlers.create_table.Sellings).all()
     for user in users:
@@ -69,6 +70,14 @@ def Fetch():
             s = m + '#' + str(user.money) + '#' + str(user.quantity) + '#' + str(user.date) + '#' + user.item + '#' + user.customer_name
             sellList.append(s)
     print(sellList)
+
+    users = session.query(Classes.DatabaseHandlers.create_table.OrdersList).all()
+    for user in users:
+        m = str(user.order_id)
+        s = m + '#' + user.company_name + '#' + str(user.total_cost) + '#' + str(user.paid_amount) + '#' + str(
+            user.due_amount) + '#' + str(user.status) + '#' + str(user.order_date) + '#' + str(user.due_date)
+        orderlistList.append(s)
+    print(orderlistList)
 
     users = session.query(Classes.DatabaseHandlers.create_table.Expenses).all()
     for user in users:
