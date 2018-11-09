@@ -97,7 +97,7 @@ INSERT INTO `medicines` (`medicine_id`, `medicine_name`, `medicine_type`, `compa
 (29, 'APepcid', 'Antacid', 'Pepcid', 10, '11', '2020-01-01', '24F', '/static/Images/pepcid.jpg'),
 (30, 'AFeosol', 'Antianemics', 'Feosol', 5, '0', '2018-01-01', '21B', '/static/Images/feosol.png'),
 (31, 'ASynthroid', 'Hormone-Replacement', 'Synthroid', 10, '14', '2018-01-01', '23D', '/static/Images/synthroid.jpg'),
-(32, 'AXylocaine', 'Anesthetic', 'Xylocaine', 10, '15', '2020-01-01', '26A', '/static/Images/xylocaine.jpg');
+(32, 'AXylocaine', 'Anesthetic', 'Xylocaine', 10, '15', '2020-01-01', '26A', '/static/Images/xylocaine.jpg'),
 (111, 'Nappa', 'Paracetamol', 'Square', 5, '0', '2018-11-27', '22b', '/static/Images/generic.png'),
 (1909, 'a', 'paracetamol', 'square', 1, '1', '2018-12-31', 'a', '/static/Images/generic.png'),
 (1991, 'a', 'antibiotic', 'square', 1, '1', '2018-12-31', 'a', '/static/Images/generic.png'),
