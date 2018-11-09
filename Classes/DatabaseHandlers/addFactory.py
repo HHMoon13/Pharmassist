@@ -3,6 +3,8 @@ from sqlalchemy.orm import sessionmaker
 import Classes.DatabaseHandlers.create_table as create_table
 import Classes.DatabaseHandlers.databaseSingleton as SingletonDatabase
 import Classes.DatabaseHandlers.Factory
+from Classes import Statics
+from Classes.DatabaseHandlers import fetch
 
 
 Base = declarative_base()
@@ -26,8 +28,15 @@ class addFactory:
         a = Classes.DatabaseHandlers.Factory
         b = a.Factory.getClass('', s)
         b.add(list)
+        #print(list)
+        Statics.userList.clear()
+        Statics.vendorList.clear()
+        Statics.medList.clear()
+        Statics.notificationList.clear()
+        Statics.orderList.clear()
+        Statics.sellList.clear()
+        Statics.expenseList.clear()
+        Statics.orderlistList.clear()
+        fetch.Fetch()
 
-
-#addList = '5#1#3#Mono#guuu#15#2011-11-01#True#200'
-#addFactory.add('', create_table.Orders, addList)
 session.close()

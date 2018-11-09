@@ -14,7 +14,7 @@ class DecoratorMedicine(AbstractMedicineDecorator):
         for i in self.medlist:
             x= i.split("#")
             if x[1] == self.medName:
-                unitPrice = x[3]
+                unitPrice = x[4]
                 break
 
         return float(unitPrice)*float(self.quantity) + self.decorated_medicine.get_cost()

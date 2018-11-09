@@ -1,4 +1,9 @@
 from flask import *
+
+from Classes.DatabaseHandlers import fetch
+from Classes.Notifications.MedicineDEPO import MedicineDEPO
+from Classes.UserStrategyFiles.Admin import Admin
+from Classes.UserStrategyFiles.NormalUser import NormalUser
 from Classes.Utilities import Iterator
 from Classes.DatabaseAccessors import AccessDatabaseMedicines as adm, AccessDatabaseAccounts as ada, AccessDatabaseVendors as adv, AccessDatabaseExpenses as ade, AccessDatabaseSellings as ads
 from Classes import Statics
@@ -30,6 +35,16 @@ def startupPage():
 @app.route('/home')
 def homepage():
     usr=Statics.currentUser
+
+    ##ForStategyPattern
+
+    type = Statics.currentUserType
+    if(type=="normal"):
+        User = NormalUser()
+    else:
+        User = Admin()
+
+    Statics.AccountMakingAbility=User.TryingToMakeAccount()
 
     ##byMoon, forNotification
     from Classes.Notifications.MedicineDEPO import MedicineDEPO
@@ -132,6 +147,7 @@ def notificationsPage():
 @app.route('/accounts')
 def accountsPage():
     currentUser = Statics.currentUser
+    AccountMakingAbility=Statics.AccountMakingAbility
     currentUserType = Statics.currentUserType
     accountList = []
     a = Iterator.Iterator
@@ -139,7 +155,7 @@ def accountsPage():
     while a.hasNext():
         accountList.append(a.next())
     print(accountList)
-    return render_template('accounts.html', currentUserType=currentUserType, accountList=accountList)
+    return render_template('accounts.html', currentUserType=currentUserType, accountList=accountList,AccountMakingAbility=AccountMakingAbility)
 
 
 @app.route('/companies')
@@ -358,6 +374,52 @@ def placeOrderPage():
     print(v.vendorsList())
     return render_template('placeOrder.html', vendorslist=v.vendorsList(), medList=JSONableMedList)
 
+@app.route('/submitReceipt', methods=['GET', 'POST'])
+def submitReceipt():
+    if request.method == "POST":
+        temp = request.form["mydata"]
+
+        y = temp.split("*")
+        print("here")
+        print(y)
+        a = Iterator.Iterator
+        a = ads.AccessDatabaseSellings().getIterator()
+        b = Iterator.Iterator
+        b = adm.AccessDatabaseMedicines().getIterator()
+       # a.update(medID, attribute, newValue)
+
+        print(y)
+        for i in y:
+            a.add(i)
+            #searching med id
+            x=i.split("#")
+            for j in Statics.medList:
+                mlist=j.split("#")
+                if(x[2]==mlist[1]):
+                    MedId=int(mlist[0])
+                    Avail=int(mlist[5])
+                    newVal = Avail - int(x[4])
+                    #newListValue=str(mlist[0])+"#"+str(mlist[1])+"#"+str(mlist[2])+"#"+str(mlist[3])+"#"+str(mlist[4])+"#"+str(newVal)+"#"+str(mlist[6])+"#"+str(mlist[7])+"#"+str(mlist[8])
+                    #Statics.medList[MedId]=newListValue
+                    ##print("aaaa")
+                    #print(Statics.medList[MedId])
+                    #print(Statics.medList)
+                    #print(MedId)
+                    break
+            #updating
+            #moon er function call dibo
+            mdepo = MedicineDEPO()
+            mdepo.sellMedicinceByID(MedId,newVal)
+
+            #b.update(MedId,"quantity",newVal)
+
+
+
+
+            print("After fetching\n")
+            print(Statics.medList)
+
+
 
 @app.route('/addreceipt', methods=['POST'])
 def receipt():
@@ -365,7 +427,7 @@ def receipt():
 
    if request.method == "POST":
        temp = request.form["mydata"]
-       list = temp.split("#")
+       list = temp.split("*")
        if temp == "":
            return "0"
        print(temp)
@@ -374,7 +436,7 @@ def receipt():
 
        cnt = 0
        for i in list:
-           x = i.split("*")
+           x = i.split("#")
            if cnt == 0:
                m = BaseMedicines(x[2], x[4])
            else:

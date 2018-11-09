@@ -3,7 +3,8 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 import Classes.DatabaseHandlers.create_table as create_table
 import Classes.DatabaseHandlers.databaseSingleton as SingletonDatabase
-
+from Classes import Statics
+from Classes.DatabaseHandlers import fetch
 
 Base = declarative_base()
 
@@ -37,6 +38,16 @@ def Update(table, id, attribute, value):
         m = session.query(create_table.Notifications).filter(create_table.Notifications.notificationID == id).update(
             {attribute: value})
         session.commit()
+    #
+    # Statics.userList.clear()
+    # Statics.vendorList.clear()
+    # Statics.medList.clear()
+    # Statics.notificationList.clear()
+    # Statics.orderList.clear()
+    # Statics.sellList.clear()
+    # Statics.expenseList.clear()
+    # Statics.orderlistList.clear()
+    # fetch.Fetch()
 
 
 #Update(create_table.Medicines, 4, 'medicine_type', 'guuuuuuuu')

@@ -19,10 +19,11 @@ class AddSellings(Classes.DatabaseHandlers.addPattern.addPattern):
     def add(self, list):
         sp = list.split('#')
         user = Classes.DatabaseHandlers.create_table.Sellings()
-        user.money = sp[1]
-        user.quantity = sp[2]
-        user.date = sp[3]
-        user.item = sp[4]
-        user.customer_name = sp[5]
+
+        user.money = sp[0]
+        user.quantity = sp[4]
+        user.date = sp[1]
+        user.item = sp[2]
+        user.customer_name = sp[3]
         session.add(user)
         session.commit()
