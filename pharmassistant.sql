@@ -93,7 +93,11 @@ INSERT INTO `medicines` (`medicine_id`, `medicine_name`, `medicine_type`, `compa
 (25, 'Pepcid', 'Antacid', 'Pepcid', 10, '11', '2020-01-01', '24F', '/static/Images/pepcid.jpg'),
 (26, 'Feosol', 'Antianemics', 'Feosol', 5, '15', '2020-01-01', '21B', '/static/Images/feosol.png'),
 (27, 'Synthroid', 'Hormone-Replacement', 'Synthroid', 10, '14', '2020-01-01', '23D', '/static/Images/synthroid.jpg'),
-(28, 'Xylocaine', 'Anesthetic', 'Xylocaine', 10, '15', '2020-01-01', '26A', '/static/Images/xylocaine.jpg'),
+(28, 'ABenadryl', 'Allergies', 'Benadryl', 3.5, '0', '2020-01-01', '22B', '/static/Images/benadryl.jpg'),
+(29, 'APepcid', 'Antacid', 'Pepcid', 10, '11', '2020-01-01', '24F', '/static/Images/pepcid.jpg'),
+(30, 'AFeosol', 'Antianemics', 'Feosol', 5, '0', '2018-01-01', '21B', '/static/Images/feosol.png'),
+(31, 'ASynthroid', 'Hormone-Replacement', 'Synthroid', 10, '14', '2018-01-01', '23D', '/static/Images/synthroid.jpg'),
+(32, 'AXylocaine', 'Anesthetic', 'Xylocaine', 10, '15', '2020-01-01', '26A', '/static/Images/xylocaine.jpg');
 (111, 'Nappa', 'Paracetamol', 'Square', 5, '0', '2018-11-27', '22b', '/static/Images/generic.png'),
 (1909, 'a', 'paracetamol', 'square', 1, '1', '2018-12-31', 'a', '/static/Images/generic.png'),
 (1991, 'a', 'antibiotic', 'square', 1, '1', '2018-12-31', 'a', '/static/Images/generic.png'),
@@ -120,6 +124,7 @@ INSERT INTO `medicines` (`medicine_id`, `medicine_name`, `medicine_type`, `compa
 (1319319391, 'a', 'paracetamol', 'square', 1, '1', '2018-12-31', 'a', '/static/Images/generic.png'),
 (1391931293, 'd', 'paracetamol', 'square', 1, '1', '2018-12-31', 'f', '/static/Images/generic.png');
 
+
 -- --------------------------------------------------------
 
 --
@@ -129,13 +134,24 @@ INSERT INTO `medicines` (`medicine_id`, `medicine_name`, `medicine_type`, `compa
 CREATE TABLE `notifications` (
   `notificationID` int(11) NOT NULL,
   `type` varchar(50) DEFAULT NULL,
-  `notiString` varchar(50) DEFAULT NULL,
+  `notiString` varchar(1000) DEFAULT NULL,
   `medID` varchar(50) DEFAULT NULL,
   `medName` varchar(50) DEFAULT NULL,
   `medShelf` varchar(50) DEFAULT NULL,
   `status` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `notifications`
+--
+
+INSERT INTO `notifications` (`notificationID`, `type`, `notiString`, `medID`, `medName`, `medShelf`, `status`) VALUES
+(104, 'Empty', 'Vicodin [5, at Shelf: 21D] is out of stock!', '5', 'Vicodin', '21D', 'unread'),
+(105, 'Empty', 'Amoxil [6, at Shelf: 20D] is out of stock!', '6', 'Amoxil', '20D', 'unread'),
+(106, 'Empty', 'Mevacor [16, at Shelf: 25A] is out of stock!', '16', 'Mevacor', '25A', 'unread'),
+(107, 'Empty', 'Actos [17, at Shelf: 23A] is out of stock!', '17', 'Actos', '23A', 'unread'),
+(108, 'Expired', 'Diflucan [19, at Shelf: 18A] date expired. Please remove from shelf.', '19', 'Diflucan', '18A', 'unread'),
+(109, 'Expired', 'Atova-10 [122, at Shelf: 20-B] date expired. Please remove from shelf.', '122', 'Atova-10', '20-B', 'unread');
 -- --------------------------------------------------------
 
 --
