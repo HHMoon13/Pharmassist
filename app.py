@@ -1,6 +1,4 @@
 from flask import *
-
-
 from Classes.Utilities import Iterator
 from Classes.DatabaseAccessors import AccessDatabaseMedicines as adm, AccessDatabaseAccounts as ada, AccessDatabaseVendors as adv, AccessDatabaseExpenses as ade, AccessDatabaseSellings as ads
 from Classes import Statics
@@ -26,7 +24,7 @@ rc.respondToState("", "")
 @app.route('/')
 def startupPage():
     response=Statics.authMessage
-    print(response)
+    #print(response)
     return render_template('signInPage.html', response=response)
 
 @app.route('/home')
@@ -40,11 +38,13 @@ def homepage():
     from Classes.Notifications.NotiTableManager import NotiTableManager
     n = NotiTableManager()
     unreadList = n.fetchUnreadNotifications()
-    for u in unreadList:
-        print(u.__str__())
-    #forNotificationEnds
+    showables = []
+    for noti in unreadList:
+        showables.append(noti.getShortString())
 
-    return render_template('homepage.html', unreadCount = len(unreadList), unreadList = unreadList)
+    return render_template('homepage.html',
+                           unreadCount = len(showables),
+                           unreadList = showables)
 
 @app.route('/aboutUs')
 def aboutUsPage():
@@ -109,12 +109,24 @@ def medListModifyPage():
 @app.route('/notifications')
 def notificationsPage():
     from Classes.Notifications.NotiTableManager import NotiTableManager
+    from Classes.Notifications.MedicineDEPO import MedicineDEPO
+    from Classes.Notifications.UnreadManager import UnreadManager
+    u = UnreadManager(MedicineDEPO())
+    print(u.getUnreadCount())
+    print(u.getUnreadList())
+
     n = NotiTableManager()
     notiList = n.fetchAllNotifications()
-    for u in notiList:
-        print(u.__str__())
+    JSONableNotiList = []
+    for noti in notiList:
+        JSONableNotiList.append(noti.__str__())
+    #print(JSONableNotiList)
+    n.markUnreadToRead()
+    u.reset()
 
-    return render_template('notificationPage.html', notiList=notiList,unreadCount=0, unreadList=[])
+    return render_template('notificationPage.html', notifications=JSONableNotiList,
+                           unreadCount=u.getUnreadCount(),
+                           unreadList=u.getUnreadList())
 
 
 @app.route('/accounts')
@@ -255,7 +267,7 @@ def update():
         rc.respondToState(username, "")
 
     response=Statics.authMessage
-    print(response)
+    #print(response)
     return render_template('signInPage.html', response=response)
 
 @app.route('/signout')
@@ -379,23 +391,42 @@ def receipt():
     #here the values to be inserted in table sellings are in this form - Money*Date*Item*CashierName*Quantity in the x array
     #Date is in YYYY-MM-DD format
     #print(x)
+
 @app.route('/t')
 def testpage():
-    from Classes.Notifications.NotiTableManager import NotiTableManager
-    m = NotiTableManager()
-    #medList = m.fetchUnreadNotifications()
-    medList = m.fetchAllNotifications()
-    for med in medList:
-        print(med.__str__())
-    return 'ok'
+    from Classes.Notifications.MedicineDEPO import MedicineDEPO
+    from Classes.Notifications.UnreadManager import UnreadManager
+    m = MedicineDEPO()
+    u = UnreadManager(m)
+    m.sellMedicinceByID(1,12)
+    print(u.getUnreadCount())
+    print(u.getUnreadList())
+    return render_template('homepage.html', unreadCount=u.getUnreadCount(), unreadList=u.getUnreadList())
 
 @app.route('/a')
 def foo():
-    return 'ok'
+    from Classes.Notifications.MedicineDEPO import MedicineDEPO
+    from Classes.Notifications.UnreadManager import UnreadManager
+    from Classes.Models.notification import Notification
+    newNoti = Notification(notiID=0,
+                 type="Expired",
+                 medName="X",
+                 medID=1,
+                 medShelf='22A',
+                 status="unread")
+    UnreadManager(MedicineDEPO()).update(newNoti)
+
+    print(UnreadManager(MedicineDEPO()).getUnreadCount())
+    return render_template('homepage.html', unreadCount=UnreadManager(MedicineDEPO()).getUnreadCount(),
+                           unreadList=UnreadManager(MedicineDEPO()).getUnreadList())
 
 @app.route('/tt')
 def testDemo():
-    return 'ok'
+    myList = ['Plavix is out of stock!', 'Benadryl date expired!', 'Feosol date expired!',
+              'Plavix is out of stock!', 'Benadryl date expired!', 'Feosol date expired!',
+              'Plavix is out of stock!', 'Benadryl date expired!', 'Feosol date expired!']
+    return render_template('demo.html', unreadCount=len(myList),
+                           unreadList=myList)
 
 if __name__ == '__main__':
     app.run()

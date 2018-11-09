@@ -37,7 +37,7 @@ class NotiGenerator(object):
         a.remove(medID)
         return new_noti
 
-    def fristNotifications(self):
+    def firstNotifications(self):
         """generate notifications to after checking medicineList"""
 
         if(self._meds ==[]):
@@ -54,8 +54,6 @@ class NotiGenerator(object):
                                                             medShelf=itemDict['shelf'],
                                                             notiID=notiID)
                 self._notifications.append(new_noti)
-                #delete this medicine too.
-
                 notiID += 1
 
             expDate = itemDict['expDate']
@@ -70,5 +68,4 @@ class NotiGenerator(object):
                 self._notifications.append(new_noti)
                 notiID += 1
 
-            print(notiID)
         return self._notifications

@@ -32,3 +32,4 @@ class AddMedicines(Classes.DatabaseHandlers.addPattern.addPattern):
         user.expiry_date = sp[6]
         session.add(user)
         session.commit()
+        #session.close()

@@ -1,7 +1,6 @@
 from Classes.DatabaseHandlers.addFactory import addFactory as addFactory
 import Classes.DatabaseHandlers.create_table as create_table
-from Classes.Utilities import Iterator
-from Classes.DatabaseAccessors import AccessDatabaseNotifications as adn
+from Classes.DatabaseHandlers.dataFetcher import fetchNotifications
 
 class NotiTableManager(object):
 
@@ -11,7 +10,10 @@ class NotiTableManager(object):
     def saveSingleNotification(self,newNotiObj):
         from Classes.Models.notiObjAdapter import NotiObjAdapter
         hashNoti = NotiObjAdapter(newNotiObj).getNotificationMsg()
-        addFactory.add('', create_table.Notifications, hashNoti)
+        #addFactory.add('', create_table.Notifications, hashNoti)
+        from Classes.DatabaseHandlers.AddNotifications import AddNotifications
+        AddNotifications.add(hashNoti)
+
 
     def saveNotificationList(self,notiObjList):
         for notiObj in notiObjList:
@@ -20,10 +22,8 @@ class NotiTableManager(object):
     @staticmethod
     def fetchAllNotifications(): # as Notification Object type List
         notiObjList = []
-        a = Iterator.Iterator
-        a = adn.AccessDatabaseNotifications().getIterator()
-        while a.hasNext():
-            hashNoti = a.next();
+        notiFromDatabase = fetchNotifications()
+        for hashNoti in notiFromDatabase:
             from Classes.Models.HashNotiAdapter import HashNotiAdapter
             notiObj = HashNotiAdapter(hashNoti)
             notiObjList.append(notiObj)
@@ -35,8 +35,7 @@ class NotiTableManager(object):
         unreadList = []
         for noti in allNotiObject:
             if noti.status=="unread":
-                shownpart = noti.getShortString()
-                unreadList.append(shownpart)
+                unreadList.append(noti)
         return unreadList
 
 

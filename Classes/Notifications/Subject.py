@@ -10,3 +10,6 @@ class Subject(object):
 
     def notifyAllObserver(self):
         pass
+
+    def callResetMethod(self):
+        pass

@@ -1,4 +1,3 @@
-from abc import ABC, abstractmethod
 from Classes.Utilities import Iterator, Container
 from Classes import Statics
 from Classes.DatabaseHandlers import add, delete, create_table, update, addFactory
@@ -34,7 +33,6 @@ class AccessDatabaseMedicines(Container.Container):
 
         def add(self, toAdd):
             addFactory.addFactory().add(create_table.Medicines, str(toAdd))
-            #addFactory.add hobe
 
         def remove(self, toBeRemove):
             delete.Delete(create_table.Medicines, str(toBeRemove))

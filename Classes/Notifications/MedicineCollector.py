@@ -1,5 +1,5 @@
 from Classes.Models.MedicineBuilder import Medicine
-from Classes.DatabaseAccessors import AccessDatabaseMedicines as adm
+from Classes.DatabaseHandlers.dataFetcher import fetchMedicines
 
 class MedicineCollector(object):
 
@@ -8,12 +8,7 @@ class MedicineCollector(object):
 
     def createMedList(self):
 
-        # medFromDatabase = [ "Saline01#Orsaline#Saline#1#50#01-07-2019#11A#/static/Images/orsaline.jpg",
-        #                       "Util01#Bandages#Utilities#2#50#01-01-2020#12B#/static/Images/bandages.jpg"]
-        medFromDatabase = []
-        a = adm.AccessDatabaseMedicines().getIterator()
-        while a.hasNext():
-            medFromDatabase.append(a.next())
+        medFromDatabase = fetchMedicines()
 
         for med in medFromDatabase:
             #print(med)
@@ -35,5 +30,7 @@ class MedicineCollector(object):
 
 # m = MedicineCollector()
 # l = m.createMedList()
+# i = 1
 # for li in l:
-#  print(li)
+#  print(str(i)+": "+li.name)
+#  i+=1
