@@ -195,11 +195,6 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
 
         notifications = {{ notifications|tojson }};
-        // notificationObjects = [];
-        // for(var i=0; i<notifications.length; i++)
-        // {
-        //     notificationObjects.push(JSON.parse(notifications[i]));
-        // }
 
         function showNotifications()
         {
@@ -207,7 +202,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
             for(var i=0;i<notifications.length;i++)
             {
-                //console.log(notifications[i]);
+                console.log(notifications[i]);
                 notificationObj = JSON.parse(notifications[i]);
                 noti_type = notificationObj.type
 
@@ -220,8 +215,10 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                 else if (noti_type=="Expired")inner_html +='<div class="alert alert-danger ">\n';
 
                 inner_html +='<button aria-hidden="true" data-dismiss="alert" class="close" type="button" style="margin-left: 50px">×</button>';
-                inner_html += '<a href="http://127.0.0.1:5000/medicineListModify" class="btn btn-xs btn-primary pull-right"\ ' +
-                    'data-toggle="modal" data-target="#exampleModal" data-whatever='+i+'>'+button_text+'</a>';
+                // inner_html += '<a href="http://127.0.0.1:5000/medicineListModify" class="btn btn-xs btn-primary pull-right"\ ' +
+                //     'data-toggle="modal" data-target="#exampleModal" data-whatever='+i+'>'+button_text+'</a>';
+				inner_html += '<a href="http://127.0.0.1:5000/medicineListModify" class="btn btn-xs btn-primary pull-right"\ ' +
+                    '>'+button_text+'</a>';
 
                 if(noti_type=="Empty") inner_html += '<strong>Stock Empty:';
                 else if (noti_type=="Expired") inner_html +='<strong> Date Expired:';

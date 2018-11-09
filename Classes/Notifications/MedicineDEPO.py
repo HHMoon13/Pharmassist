@@ -2,6 +2,8 @@ from Classes.Notifications.Subject import Subject
 from Classes.Notifications.MedicineCollector import MedicineCollector
 from Classes.Notifications.NotiGenerator import NotiGenerator
 from Classes.Notifications.NotiTableManager import NotiTableManager
+from Classes.Utilities import Iterator
+from Classes.DatabaseAccessors import AccessDatabaseMedicines as adm, AccessDatabaseAccounts as ada, AccessDatabaseVendors as adv, AccessDatabaseExpenses as ade, AccessDatabaseSellings as ads
 
 
 class MedicineDEPO(Subject):
@@ -34,16 +36,30 @@ class MedicineDEPO(Subject):
         def addMedicineByID(self,medID,qty):
             pass
 
-        def sellMedicinceByID(self,medID,qty):
+        def sellMedicinceByID(self, medID, qty):
+
+            b = Iterator.Iterator
+            b = adm.AccessDatabaseMedicines().getIterator()
+
+            b.update(medID, "quantity", qty)
+            # qty te updated medicine quantity for that medID ase. kichu minus kora lagbe na
+
             """Update that medicine's quantity in database
             if it becomes zero, create newEmptyNotification
             notify unreadManager, NotificationTableManager"""
+
+            newQty = qty
+            if newQty == 0:
+                self._newNoti = self.notiGenerator.generateEmptyNotification(medID=medID, medName="x", medShelf="y",
+                                                                             notiID=0)
+                self.notifyAllObserver()
             pass
 
         def removeMedicineByID(self,medID):
             from Classes.DatabaseAccessors import AccessDatabaseMedicines as adm
             a = adm.AccessDatabaseMedicines().getIterator()
             a.remove(medID)
+            print("removed")
 
         def onLoadNotifications(self):
             self.notiGenerator._setMeds(self._medicines)
