@@ -33,6 +33,10 @@ def Update(table, id, attribute, value):
         m = session.query(create_table.OrdersList).filter(create_table.OrdersList.order_id == id).update(
             {attribute: value})
         session.commit()
+    elif s == "<class 'Classes.DatabaseHandlers.create_table.Notifications'>":
+        m = session.query(create_table.Notifications).filter(create_table.Notifications.notificationID == id).update(
+            {attribute: value})
+        session.commit()
 
 
 #Update(create_table.Medicines, 4, 'medicine_type', 'guuuuuuuu')

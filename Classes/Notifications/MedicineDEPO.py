@@ -1,7 +1,7 @@
 from Classes.Notifications.Subject import Subject
-from Classes.Notifications.lastAttempt.MedicineCollector import MedicineCollector
-from Classes.Notifications.lastAttempt.NotiGenerator import NotiGenerator
-from Classes.Notifications.lastAttempt.NotiTableManager import NotiTableManager
+from Classes.Notifications.MedicineCollector import MedicineCollector
+from Classes.Notifications.NotiGenerator import NotiGenerator
+from Classes.Notifications.NotiTableManager import NotiTableManager
 
 
 class MedicineDEPO(Subject):

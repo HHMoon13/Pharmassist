@@ -168,27 +168,24 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                                 <a href="/signout" style="position: fixed; top: 4.7%; right: 1%; font-family: 'Ubuntu Light'; font-size: 110%; color: black">Sign Out</a>
 								<ul class="nofitications-dropdown" style="margin-left: 80%">
 									<li class="dropdown head-dpdn">
-										<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-bell"></i><span class="badge blue">3</span></a>
-										<ul class="dropdown-menu">
+										<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-bell"></i><span class="badge blue">{{unreadCount}}</span></a>
+										<ul class="dropdown-menu" style="margin-left: 60%" >
+
 											<li>
 												<div class="notification_header">
-													<h3>You have 3 new notification</h3>
+													<h3>You have {{unreadCount}} new notification</h3>
 												</div>
 											</li>
-											<li><a href="#">
-												<div class="user_img"><img src="static/images/p5.png" alt=""></div>
-											   <div class="notification_desc">
-												</div>
-											   <div class="clearfix"></div>
-											 </a></li>
-											 <li><a href="#">
-												<div class="user_img"><img src="static/images/p7.png" alt=""></div>
-											   <div class="notification_desc">
-												<p>Lorem ipsum dolor</p>
-												<p><span>1 hour ago</span></p>
-												</div>
-											   <div class="clearfix"></div>
-											 </a></li>
+                                            <ul style="list-style-type:disc">
+											{% for n in unreadList %}
+												<li>
+													<div class="notification_desc">
+													<p>{{n}}</p>
+													</div>
+                                                    <div class="clearfix"></div>
+												</li>
+											{% endfor %}
+                                            </ul>
 											 <li>
 												<div class="notification_bottom">
 													<a href="notifications">See all notifications</a>

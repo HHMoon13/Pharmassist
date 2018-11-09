@@ -52,7 +52,7 @@ def Delete(table, id):
 
     elif s == "<class 'Classes.DatabaseHandlers.create_table.Notifications'>":
         for user in users:
-            m = int(user.notification_id)
+            m = int(user.notificationID)
             if m == int(id):
                 session.delete(user)
                 session.commit()

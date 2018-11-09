@@ -1,32 +1,20 @@
-import os
 from flask import *
 
 from Classes.Notifications.NotificationGenerator import NotificationGenerator
-from Classes.Notifications.NotificationPageManager import NotificationPageManager
 from Classes.Notifications.UnreadNotificationManager import UnreadNotificationManager
 from Classes.Utilities import Iterator
 from Classes.DatabaseAccessors import AccessDatabaseMedicines as adm, AccessDatabaseAccounts as ada, AccessDatabaseVendors as adv, AccessDatabaseExpenses as ade, AccessDatabaseSellings as ads
 from Classes import Statics
-import Classes.DatabaseHandlers.fetch
 from Classes.Notifications import MedicineList
-from Classes.Models import *
-from Classes.ManageOrders import CompanyList as companyList
-from Classes.ManageOrders import medOrderList as medOrderList
-from Classes.ManageOrders import OrderList as OrderList
-from Classes.Utilities import OperationFactory
-from Classes.Utilities import ResponseContext, ResponseState as Response
+from Classes.Utilities import ResponseContext
 from Classes.AuthenticationResponses import OKState, WrongUsernameState, WrongPasswordState, InitialState
 from Classes.DecoratorPatternFiles.BaseMedicines import BaseMedicines
 from Classes.DecoratorPatternFiles.DecoratorMedicine import DecoratorMedicine
-from Classes.Models import medOrders
 from Classes.ManageOrders import CompanyList as companyList
 from Classes.ManageOrders import medOrderList as medOrderList
 from Classes.ManageOrders.makeOrder import makeOrder
 from Classes.ManageOrders import OrderList as OrderList
 from Classes.Utilities import OperationFactory
-import json
-
-
 
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
@@ -46,7 +34,19 @@ def startupPage():
 @app.route('/home')
 def homepage():
     usr=Statics.currentUser
-    return render_template('homepage.html', usr=usr)
+
+    ##byMoon, forNotification
+    from Classes.Notifications.MedicineDEPO import MedicineDEPO
+    m = MedicineDEPO()
+    firstNotis = m.onLoadNotifications()
+    from Classes.Notifications.NotiTableManager import NotiTableManager
+    n = NotiTableManager()
+    unreadList = n.fetchUnreadNotifications()
+    for u in unreadList:
+        print(u.__str__())
+    #forNotificationEnds
+
+    return render_template('homepage.html', unreadCount = len(unreadList), unreadList = unreadList)
 
 @app.route('/aboutUs')
 def aboutUsPage():
@@ -110,13 +110,13 @@ def medListModifyPage():
 
 @app.route('/notifications')
 def notificationsPage():
-    m = MedicineList.MedicineList()
-    notiList = [] #list of strings
-    for x in m.sendNotifications():
-        notiList.append(x)
+    from Classes.Notifications.NotiTableManager import NotiTableManager
+    n = NotiTableManager()
+    notiList = n.fetchAllNotifications()
+    for u in notiList:
+        print(u.__str__())
 
-    print(notiList)
-    return render_template('notifications.html', notiList=notiList)
+    return render_template('notificationPage.html', notiList=notiList,unreadCount=0, unreadList=[])
 
 
 @app.route('/accounts')
@@ -378,10 +378,18 @@ def receipt():
     #here the values to be inserted in table sellings are in this form - Money*Date*Item*CashierName*Quantity in the x array
     #Date is in YYYY-MM-DD format
     #print(x)
-@app.route('/testing')
+@app.route('/t')
 def testpage():
-    notiPage = NotificationPageManager()
-    notiPage.showAllNotifications()
+    from Classes.Notifications.NotiTableManager import NotiTableManager
+    m = NotiTableManager()
+    #medList = m.fetchUnreadNotifications()
+    medList = m.fetchAllNotifications()
+    for med in medList:
+        print(med.__str__())
+    return 'ok'
+
+@app.route('/a')
+def foo():
     return 'ok'
 
 @app.route('/tt')

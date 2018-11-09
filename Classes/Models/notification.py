@@ -9,6 +9,14 @@ class Notification(object):
         self.medShelf = medShelf
         self.status = status
 
+    def getShortString(self):
+        notiStr = self.medName ;
+        if self.type == "Empty":
+            notiStr += " is out of stock!"
+        elif self.type == "Expired":
+            notiStr += " date expired!"
+        return notiStr
+
     def getNotiString(self):
         notiStr = self.medName +" ["+str(self.medID)+", at Shelf: "+self.medShelf+"]"
         if self.type=="Empty":
@@ -26,3 +34,10 @@ class Notification(object):
                           +'status": "'+self.status+'"}'
         return jsonTypeString
 
+# n = Notification(1,"Empty","Napa",30,"22C","unread")
+# new_noti = Notification(notiID=notiID,
+#                                 type="Expired",
+#                                 medName=medName,
+#                                 medID=medID,
+#                                 medShelf=medShelf,
+#                                 status="Unread")

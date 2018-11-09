@@ -119,43 +119,31 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 							<div class="clearfix"> </div>
 						 </div>
 						 <div class="header-right">
-							<div class="profile_details_left"><!--notifications of menu start -->
+							<div class="profile_details_left" style="position: fixed; right: 4.5%"><!--notifications of menu start -->
+                                <a href="/signout" style="position: fixed; top: 4.7%; right: 1%; font-family: 'Ubuntu Light'; font-size: 110%; color: black">Sign Out</a>
 								<ul class="nofitications-dropdown" style="margin-left: 80%">
 									<li class="dropdown head-dpdn">
-										<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-bell"></i><span class="badge blue">3</span></a>
-										<ul class="dropdown-menu">
+										<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-bell"></i><span class="badge blue">{{unreadCount}}</span></a>
+										<ul class="dropdown-menu" style="margin-left: 60%" >
+
 											<li>
 												<div class="notification_header">
-													<h3>You have 3 new notification</h3>
+													<h3>You have {{unreadCount}} new notification</h3>
 												</div>
 											</li>
-											<li><a href="#">
-												<div class="user_img"><img src="static/images/p5.png" alt=""></div>
-											   <div class="notification_desc">
-												<p>Lorem ipsum dolor</p>
-												<p><span>1 hour ago</span></p>
-												</div>
-											  <div class="clearfix"></div>
-											 </a></li>
-											 <li class="odd"><a href="#">
-												<div class="user_img"><img src="static/images/p6.png" alt=""></div>
-											   <div class="notification_desc">
-												<p>Lorem ipsum dolor</p>
-												<p><span>1 hour ago</span></p>
-												</div>
-											   <div class="clearfix"></div>
-											 </a></li>
-											 <li><a href="#">
-												<div class="user_img"><img src="static/images/p7.png" alt=""></div>
-											   <div class="notification_desc">
-												<p>Lorem ipsum dolor</p>
-												<p><span>1 hour ago</span></p>
-												</div>
-											   <div class="clearfix"></div>
-											 </a></li>
+                                            <ul style="list-style-type:disc">
+											{% for n in unreadList %}
+												<li>
+													<div class="notification_desc">
+													<p>{{n}}</p>
+													</div>
+                                                    <div class="clearfix"></div>
+												</li>
+											{% endfor %}
+                                            </ul>
 											 <li>
 												<div class="notification_bottom">
-													<a href="/notifcations">See all notifications</a>
+													<a href="notifications">See all notifications</a>
 												</div>
 											</li>
 										</ul>
@@ -169,21 +157,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 								<ul>
 									<li class="dropdown profile_details_drop">
 										<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-											<div class="profile_img">
-												<span class="prfil-img"><img src="static/images/p1.png" alt=""> </span>
-												<div class="user-name">
-													<p>Malorum</p>
-													<span>Administrator</span>
-												</div>
-												<i class="fa fa-angle-down lnr"></i>
-												<i class="fa fa-angle-up lnr"></i>
-												<div class="clearfix"></div>
-											</div>
 										</a>
 										<ul class="dropdown-menu drp-mnu">
-											<li> <a href="#"><i class="fa fa-cog"></i> Settings</a> </li>
-											<li> <a href="#"><i class="fa fa-user"></i> Profile</a> </li>
-											<li> <a href="#"><i class="fa fa-sign-out"></i> Logout</a> </li>
+											<li> <a href="\accounts"><i class="fa fa-cog"></i>Accounts</a> </li>
 										</ul>
 									</li>
 								</ul>
@@ -244,7 +220,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                 else if (noti_type=="Expired")inner_html +='<div class="alert alert-danger ">\n';
 
                 inner_html +='<button aria-hidden="true" data-dismiss="alert" class="close" type="button" style="margin-left: 50px">×</button>';
-                inner_html += '<a href="https://www.w3schools.com/" class="btn btn-xs btn-primary pull-right"\ ' +
+                inner_html += '<a href="http://127.0.0.1:5000/medicineListModify" class="btn btn-xs btn-primary pull-right"\ ' +
                     'data-toggle="modal" data-target="#exampleModal" data-whatever='+i+'>'+button_text+'</a>';
 
                 if(noti_type=="Empty") inner_html += '<strong>Stock Empty:';
