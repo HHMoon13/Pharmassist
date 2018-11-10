@@ -238,6 +238,21 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
             var id = document.getElementById("id").value;
             var name = document.getElementById("name").value;
             var num = document.getElementById("num").value;
+            if(id=="")
+            {
+                alert("Please enter vendor ID.");
+                return;
+            }
+            else if(name=="")
+            {
+                alert("Please enter vendor name");
+                return;
+            }
+            else if(num=="")
+            {
+                alert("Please enter vendor contact number");
+                return;
+            }
             for(var i=0;i<vendorList.length;i++)
             {
                 var temp = vendorList[i].split("#");
@@ -246,11 +261,17 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                     alert("ID already in use!");
                     return;
                 }
+                else if(temp[1]==name)
+                {
+                    alert("Company name already in use.");
+                    return;
+                }
             }
             var toSend=id+"#"+name+"#"+num;
             newComp = [{"comp": ""+toSend}];
             var temp2 = JSON.stringify(newComp);
             $.post("/addCompanyHandler", temp2, function(){});
+            alert("Company added successfully");
             window.location="/companies";
         }
     </script>

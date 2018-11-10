@@ -3,7 +3,7 @@ from sqlalchemy.orm import sessionmaker
 import Classes.DatabaseHandlers.create_table as create_table
 import Classes.DatabaseHandlers.fetch as fetch
 import Classes.DatabaseHandlers.databaseSingleton as SingletonDatabase
-
+from Classes import Statics
 
 Base = declarative_base()
 
@@ -71,14 +71,14 @@ def Delete(table, id):
                 session.delete(user)
                 session.commit()
 
-    userList = []
-    vendorList = []
-    medList = []
-    notificationList = []
-    orderList = []
-    sellList = []
-    expenseList = []
-    orderlistList = []
+    Statics.userList.clear()
+    Statics.vendorList.clear()
+    Statics.medList.clear()
+    Statics.notificationList.clear()
+    Statics.orderList.clear()
+    Statics.sellList.clear()
+    Statics.expenseList.clear()
+    Statics.orderlistList.clear()
 
     fetch.Fetch()
 

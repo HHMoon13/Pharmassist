@@ -34,7 +34,7 @@ class AccessDatabaseMedicines(Container.Container):
 
         def add(self, toAdd):
             addFactory.addFactory().add(create_table.Medicines, str(toAdd))
-            #addFactory.add hobe
+            #Statics.medList.append(toAdd)
 
         def remove(self, toBeRemove):
             delete.Delete(create_table.Medicines, str(toBeRemove))

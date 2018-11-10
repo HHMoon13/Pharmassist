@@ -441,7 +441,18 @@ function showOptions(opNum)
                 else if(attribute=="date")
                 {
                     var tempAtt = newValue.split("-");
+                    if(tempAtt.length!=3)
+                    {
+                        alert("Please insert date in YYYY-MM-DD format");
+                        return;
+                    }
+                    if(isNaN(tempAtt[0]) || isNaN([tempAtt[1]]) || isNaN(tempAtt[2]))
+                    {
+                        alert("Please insert a valid date.");
+                        return;
+                    }
                     var tempVal = [];
+
                     tempVal[2]=Number(tempAtt[0])
                     tempVal[1]=Number(tempAtt[1])
                     tempVal[0]=Number(tempAtt[2])
@@ -513,6 +524,7 @@ function showOptions(opNum)
             msg = [{"change": ""+toSend}];
             var temp = JSON.stringify(msg);
             $.post("/medChange", temp, function(){});
+            alert("Medicine list updated successfully");
             location.assign('/medicines');
         }
 

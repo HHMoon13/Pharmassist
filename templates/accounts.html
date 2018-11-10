@@ -16,7 +16,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
         {
             position:fixed;
             top: 75%;
-            left: 15%;
+            left: 18%;
             width: 10%;
             height: 5%;
             background: white;
@@ -249,6 +249,20 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
         };
 
         accountList = {{ accountList|tojson }}
+        AccountMakingAbility={{ AccountMakingAbility|tojson }}
+
+        function tryToAddUser() {
+
+            if(AccountMakingAbility)
+            {
+                window.location = "/newUser";
+            }
+            else
+            {
+                alert("Permission Denied!You have to be admin to add new users!")
+            }
+
+        }
 
 
 
@@ -425,7 +439,7 @@ $(".sidebar-icon").click(function() {
         </table>
     </div>
 
-    <button class="addButton" onclick="window.location='/newUser'">
+    <button class="addButton" onclick="tryToAddUser()">
         Add New User
     </button>
 

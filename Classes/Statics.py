@@ -20,3 +20,4 @@ currentUserType="NONE"
 authMessage="None"
 imageLink="/static/Images/generic.png"
 medicineOperation=""
+AccountMakingAbility=False

@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from Classes.Utilities import Iterator, Container
 from Classes import Statics
+from Classes.DatabaseHandlers import addFactory, delete, create_table
 
 class AccessDatabaseExpenses(Container.Container):
 
@@ -32,18 +33,13 @@ class AccessDatabaseExpenses(Container.Container):
                 self.index=0
 
         def add(self, toAdd):
-            temp=toAdd
-            #pass temp to a database management class method
+            addFactory.addFactory().add(create_table.Expenses, str(toAdd))
 
         def remove(self, toBeRemove):
-            temp=toBeRemove
-            #pass temp to a database management class method
+            delete.Delete(create_table.Expenses, int(toBeRemove))
 
         def update(self, medName, attribute, newValue):
-            temp=medName
-            #dowork
+            pass
 
         def search(self, toSearch):
-            temp=""
-            #pass temp to a database management class method which returns the search result
-            return temp
+            pass

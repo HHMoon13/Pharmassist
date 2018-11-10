@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from Classes.Utilities import Iterator, Container
 from Classes import Statics
+from Classes.DatabaseHandlers import addFactory, delete, create_table
 
 class AccessDatabaseAccounts(Container.Container):
 
@@ -33,17 +34,16 @@ class AccessDatabaseAccounts(Container.Container):
 
         def add(self, toAdd):
             temp=toAdd
+            addFactory.addFactory().add(create_table.Users, str(toAdd))
             #pass temp to a database management class method
 
         def remove(self, toBeRemove):
             temp=toBeRemove
+            delete.Delete(create_table.Users, int(toBeRemove))
             #pass temp to a database management class method
 
         def update(self, username, attribute, newValue):
-            temp=username
-            #dowork
+            pass
 
         def search(self, toSearch):
-            temp=""
-            #pass temp to a database management class method which returns the search result
-            return temp
+            pass

@@ -1,4 +1,5 @@
-class medicines(object):
+
+class Medicine(object):
     def __init__(self):
         self.medID = None
         self.name = None
@@ -9,6 +10,8 @@ class medicines(object):
         self.expDate = None
         self.shelf = None
         self.imgLink = None
+        self.Builder = None
+
     class Builder(object):
         def __init__(self, medID=None, name=None, type=None, company=None, qty=None, price=None,
                      expDate=None, shelf=None, imgLink=None):
@@ -59,7 +62,7 @@ class medicines(object):
             return self
 
         def build(self):
-            med = medicines()
+            med = Medicine()
             med.medID = self.medID
             med.name = self.name
             med.type = self.type
@@ -70,3 +73,15 @@ class medicines(object):
             med.shelf = self.shelf
             med.imgLink = self.imgLink
             return med
+
+    def __str__(self):
+
+        jsonTypeString =  '{"medID": "'+ self.medID+'", "name": "'+self.name+'", "' \
+                          + 'type": "' + self.type + '", "' \
+                          + 'company": "' + self.company + '", "' \
+                          + 'price": "' + self.price + '", "' \
+                          + 'qty": "' + self.qty + '", "' \
+                          + 'expDate": "'+self.expDate+'", "' \
+                        + 'shelf": "'+self.shelf+'", "'\
+                        + 'imgLink": "'+self.imgLink+'"}'
+        return jsonTypeString

@@ -17,9 +17,11 @@ session = Session()
 
 class AddVendors(Classes.DatabaseHandlers.addPattern.addPattern):
     def add(self, list):
+        print(list)
         sp = list.split('#')
         user = Classes.DatabaseHandlers.create_table.Vendors()
+        user.vendor_id = sp[0]
         user.company_name = sp[1]
-        user.contact_address = sp[2]
+        user.contact_number = sp[2]
         session.add(user)
         session.commit()

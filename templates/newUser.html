@@ -67,7 +67,7 @@
             message = [{"message": ""+message}];
             var temp = JSON.stringify(message);
             $.post("/addNewUser", temp, function(){});
-
+            alert("Account creation successful.");
             window.open("/accounts");
         }
 

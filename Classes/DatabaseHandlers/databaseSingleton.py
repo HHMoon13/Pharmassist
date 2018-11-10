@@ -10,7 +10,7 @@ class Database(object):
             cls._instance = object.__new__(cls)
 
             # dialect+driver://username:password@host:port/database
-            Database._instance.engine = create_engine('mysql+pymysql://root:@localhost/pharmassistant')
+            Database._instance.engine = create_engine('mysql+pymysql://root:munia@localhost/pharmassistant',isolation_level="READ UNCOMMITTED")
             # Database._instance.engine = create_engine('mysql+pymysql://root:@localhost/pharmassistant')
             # engine = Database._instance.engine
 

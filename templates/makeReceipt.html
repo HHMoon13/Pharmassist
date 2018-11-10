@@ -119,8 +119,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 							<div class="clearfix"> </div>
 						 </div>
 						 <div class="header-right">
-							<div class="profile_details_left" style="position: fixed; right: 4.5%"><!--notifications of menu start -->
-                                <a href="/signout" style="position: fixed; top: 4.7%; right: 1%; font-family: 'Ubuntu Light'; font-size: 110%; color: black">Sign Out</a>
+							<div class="profile_details_left"><!--notifications of menu start -->
 								<ul class="nofitications-dropdown" style="margin-left: 80%">
 									<li class="dropdown head-dpdn">
 										<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-bell"></i><span class="badge blue">3</span></a>
@@ -170,7 +169,16 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 								<ul>
 									<li class="dropdown profile_details_drop">
 										<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-
+											<div class="profile_img">
+												<span class="prfil-img"><img src="static/images/p1.png" alt=""> </span>
+												<div class="user-name">
+													<p>Malorum</p>
+													<span>Administrator</span>
+												</div>
+												<i class="fa fa-angle-down lnr"></i>
+												<i class="fa fa-angle-up lnr"></i>
+												<div class="clearfix"></div>
+											</div>
 										</a>
 										<ul class="dropdown-menu drp-mnu">
 											<li> <a href="#"><i class="fa fa-cog"></i> Settings</a> </li>
@@ -198,13 +206,44 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				}
 			 });
 
+			 var quantitiy=1;
+           $('.quantity-right-plus').click(function(e){
+
+                // Stop acting like a button
+                e.preventDefault();
+                // Get the field name
+                var quantity = parseInt($('#number').val());
+
+                // If is not undefined
+
+                    $('#number').val(quantity + 1);
+
+
+                    // Increment
+
+            });
+
+             $('.quantity-left-minus').click(function(e){
+                // Stop acting like a button
+                e.preventDefault();
+                // Get the field name
+                var quantity = parseInt($('#number').val());
+
+                // If is not undefined
+
+                    // Increment
+                    if(quantity>1){
+                    $('#number').val(quantity - 1);
+                    }
+            });
+
+
 		});
 		</script>
 		<!-- /script-for sticky-nav -->
 
  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
      <script type="text/javascript">
-
 var todaysDate="";
 
       window.onload = function WindowLoad(event)
@@ -220,6 +259,7 @@ var todaysDate="";
         }
 
         medNames = {{ medNames|tojson }}
+            var totalCost=0;
 
 
 
@@ -299,7 +339,8 @@ var todaysDate="";
             document.getElementById("search").value="";
             document.getElementById("number").value=1;
 
-              setTotalCost();
+              //setTotalCost();
+              finalize();
                if(document.getElementById("money_given").value!="") viewCash();
 
             selectedRow();
@@ -316,7 +357,8 @@ var todaysDate="";
                     index = this.parentElement.rowIndex;
 
                         table.deleteRow(index);
-                        setTotalCost();
+                        //setTotalCost();
+                        finalize();
                         if(document.getElementById("money_given").value!="") viewCash();
 
                     };
@@ -427,7 +469,7 @@ var todaysDate="";
 
         var isNameDone=false;
 
-        var totalCost=0;
+
 
         function setTotalCost() {
 
@@ -456,20 +498,51 @@ var todaysDate="";
 
 
         }
+
+        var viewcash = false;
         function viewCash()
         {
-            if(document.getElementById("money_given").value=="")
-            {
-             alert("Please enter paid cash amount!");
-             return;
-            }
+
             var div = document.getElementById("rcpt_foot3");
-            div.innerHTML= '<h4 style = "font-weight: bold;font-size: 160%;">Cash change: TK '+ (parseFloat(document.getElementById("money_given").value)-totalCost)+'</h4>';
+            div.innerHTML= '<h5 style="font-size: 100%"><b>Cash Change: TK '+(parseFloat(document.getElementById("money_given").value)-totalCost)+'</b><h5>';
+            console.log(document.getElementById("money_given").value);
+            console.log("aschiiiii");
+            viewcash=true;
+        }
+        function restrict(e) {
+            var inputKeyCode = e.keyCode ? e.keyCode : e.which;
+            if( inputKeyCode != null)
+            {
+                if(inputKeyCode<48 && inputKeyCode!=46 )    e.preventDefault();
+                if(inputKeyCode>57)    e.preventDefault();
+
+            }
+
         }
 
-
         var Key="";
-        function finalize()
+        function submit() {
+            viewCash();
+
+            if(document.getElementById("money_given").value=="")
+            {
+                alert("Add the paid cash value");
+            }
+            else
+            {
+
+                finalize2();
+                if(viewcash==true) {
+                    alert("Receipt summitted!")
+
+                    window.location = '/makeReceipt';
+
+                }
+            }
+
+        }
+
+        function finalize2()
         {
 
             var  TableData = new Array();
@@ -481,11 +554,11 @@ var todaysDate="";
             console.log(todaysDate);
 
            $('#my_table tr').each(function(row, tr){
-               var temp = ""+$(tr).find('td:eq(3)').text()+"*";
-               temp+= ""+todaysDate+"*";
+               var temp = ""+$(tr).find('td:eq(3)').text()+"#";
+               temp+= ""+todaysDate+"#";
 
-               temp+=""+$(tr).find('td:eq(0)').text()+"*";
-               temp+=""+usr+"*";
+               temp+=""+$(tr).find('td:eq(0)').text()+"#";
+               temp+=""+usr+"#";
                temp+=""+$(tr).find('td:eq(1)').text();
                totalTemp= ""+$(tr).find('td:eq(3)').text();
                var x = parseFloat(totalTemp);
@@ -510,7 +583,7 @@ var todaysDate="";
                 if(i==TableData.length-1)
                 test+=""+TableData[i];
                 else
-                    test+=""+TableData[i]+"#";
+                    test+=""+TableData[i]+"*";
 
             }
             // Key = [{"task": ""+test}];
@@ -521,11 +594,10 @@ var todaysDate="";
 
 
 
-             $.post("/addreceipt", {"mydata": mydata})
+             $.post("/submitReceipt", {"mydata": mydata})
 
-console.log(mydata);
 
-            setTotalCost();
+           // setTotalCost();
 
 
 
@@ -535,28 +607,165 @@ console.log(mydata);
         }
 
 
+
+        function finalize()
+        {
+
+            var  TableData = new Array();
+            var cost= new Array();
+            var totalTemp="";
+
+
+            var x = 0;
+            console.log(todaysDate);
+
+           $('#my_table tr').each(function(row, tr){
+               var temp = ""+$(tr).find('td:eq(3)').text()+"#";
+               temp+= ""+todaysDate+"#";
+
+               temp+=""+$(tr).find('td:eq(0)').text()+"#";
+               temp+=""+usr+"#";
+               temp+=""+$(tr).find('td:eq(1)').text();
+               totalTemp= ""+$(tr).find('td:eq(3)').text();
+               var x = parseFloat(totalTemp);
+
+   TableData[row]=temp;
+   cost[row]=x;
+
+
+
+});
+
+            TableData.shift();
+            cost.shift();
+            var sum =0;
+
+              var test="";
+
+            for(var i=0;i<TableData.length;i++)
+            {
+              // console.log(TableData[i]);
+                sum+=cost[i];
+                if(i==TableData.length-1)
+                test+=""+TableData[i];
+                else
+                    test+=""+TableData[i]+"*";
+
+            }
+            // Key = [{"task": ""+test}];
+            // var temp = JSON.stringify(Key);
+            var mydata= test+"";
+            mydata=""+test.toString();
+            //console.log(sum);
+
+
+
+            // $.post("/addreceipt", {"mydata": mydata})
+            var req = new XMLHttpRequest();
+        var result = document.getElementById('rcpt_foot');
+        req.onreadystatechange = function()
+        {
+          if(this.readyState == 4 && this.status == 200) {
+            //result.innerHTML = this.responseText;
+            result.innerHTML='<h5 style = "font-weight: bold;font-size: 100%">Total Cost: TK '+this.responseText+'</h5>';
+            totalCost=parseFloat(this.responseText.toString());
+          } else {
+            result.innerHTML = "処理中...";
+          }
+        }
+        req.open('POST', '/addreceipt', true);
+        req.setRequestHeader('content-type', 'application/x-www-form-urlencoded;charset=UTF-8');
+        req.send("mydata=" + mydata);
+
+console.log(mydata);
+
+           // setTotalCost();
+
+
+
+
+
+
+        }
+
     </script>
 
+
 <!--inner block start here-->
-<div class="inner-block" style="height: 700px;">
+<div class="inner-block" >
 	<!-- <% emne eitar vitor python code lkha jay %> -->
 
+        <div style="padding: 10px">
+            <h3 align="center"><b>Receipt</b></h3>
+        </div>
+ <div  id="main" style="padding-bottom: 10px" >
+          <div id="d1" style="padding:5px;float: left;padding-bottom: 5px;width: 80%" >
+              <form class="form-horizontal">
+              <div class="form-group">
 
-        <div id="receipt" style="position: fixed; top: 15%; left: 17%; height: 55%; width: 73%; border: 2px solid black; border-radius: 2px; font-family: 'Ubuntu Light'; background: white; color: black; font-size: 180%; overflow: auto">
+                <label for="paid" class="col-sm-3 control-label">Select Medicine</label>
+               <div class="col-sm-3">
+                <input type="text" class="form-control" name="search" id="search" placeholder="Type Any Medicine" list="searchresults" autocomplete="off"
+                   >
+                   </div>
 
-            <table class="table table-hover" id="my_table" style="top: 15.5%">
+                    <datalist id="searchresults"></datalist>
+
+</div>
+              <div>
+                  <div class="form-group">
+
+               <label for="quantity" class="col-sm-3 control-label">Add Quantity</label>
+             <!--<input id="number" type="number" min="1" value="1" >-->
+                    <div class="col-sm-3">
+                     <div class="input-group">
+                    <span class="input-group-btn">
+                        <button type="button" class="quantity-left-minus btn btn-danger btn-number"  data-type="minus" data-field="">
+                            <span class="glyphicon glyphicon-minus"></span>
+                        </button>
+                    </span>
+                    <input type="text" id="number" name="number"  class="form-control input-number" value="1" min="1" max="1000">
+                    <span class="input-group-btn">
+                        <button type="button" class="quantity-right-plus btn btn-success btn-number" data-type="plus" data-field="">
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button>
+                    </span>
+                     </div>
+                        </div>
 
 
-                <thead  class="thead-dark">
-                <tr>
+            </div>
+                  </div>
+                  </form>
+              <div class="col-sm-2 col-sm-offset-2 col-md-offset-3">
+             <button id="addMed" onclick="addHtmlTableRow()" class="btn btn-primary" style="width: 75px">Add</button>
+              </div>
+            </div>
+            <div id="d2" style="float: right;width: 20%" >
+                <p id="currentDate" align="right"  ></p>
+                 <p id="cashier" align="right"  ></p>
+
+
+            </div>
+        </div>
+
+        <div id="receipt" class="container" style="  width: 101%;overflow: auto">
+
+            <table class="table table-hover" id="my_table" style="top: 15.5%;padding-right: 10%;padding-left: 10%">
+
+
+                <thead  >
+                <tr style="background-color: #8C8C8C;color: #ffffff">
+
                     <th>Medicine</th>
                     <th>Quantity</th>
                     <th>Unit price</th>
                     <th>Total price</th>
-                    <th></th>
+                    <th>Remove</th>
+
                 </tr>
                 </thead>
-                <tbody id="frm">
+                <tbody id="frm" >
 
                 </tbody>
             </table>
@@ -565,98 +774,88 @@ console.log(mydata);
 
 
         </div>
-        <button onclick="finalize()" style="position:fixed; top: 90.25%; left: 48%; width: 8%; height: 6%; border: 3px solid black; border-radius: 2px; font-size: 140%; font-family: 'Ubuntu Light'; background: white; color: black">Submit</button>
 
 
 
 
-        <div id="main" style="position:absolute;width:98%;margin:10px;height: 40px">
-            <div id="d1" style="width:60%;padding:5px;float: left;">
-
-                <input type="text" name="search" id="search" placeholder="Type Any Medicine" list="searchresults" autocomplete="off"
-                   style="position:fixed; top: 8%; left: 19%; font-family: Ubuntu; font-size: 170%;
-                    height: 5%; width: 17%; border: 2px solid black; border-radius: 2px">
-                    <datalist id="searchresults"></datalist>
-             <input id="number" type="number" min="1" value="1" style="position:fixed; top: 8%; left: 37%; font-family: Ubuntu; font-size: 170%;
-                    height: 5%; width: 7%; border: 2px solid black; border-radius: 2px">
-             <button id="addMed" onclick="addHtmlTableRow()" class="options">Add</button>
-            </div>
-            <div id="d2" style="width:40%;float: right;">
-                <p id="currentDate" align="right" style=" font-family: Ubuntu; font-size: 160%;font-weight: bold;padding-right: 10px"></p>
-                 <p id="cashier" align="right" style=" font-family: Ubuntu; font-size: 160%;font-weight: bold;padding-right: 10px"></p>
 
 
-            </div>
-        </div>
+ <hr>
 
-        <div style="position: fixed;top:69.75%;padding-left: 10px;height: 20%;border: 3px solid black;width: 73% ;left:17% ;">
-            <div  style="width:60%;padding:5px;float: left;">
+
+        <div class="container" >
+
+            <div id="d1" style="float: left;padding-top: 20px">
                 <div id="rcpt_foot">
-                    <h3  style = "font-size: 160%;font-weight: bold;">Total Cost: TK 0</h3>
+                    <h5 style = "font-weight: bold;font-size: 100%">Total Cost: TK 0</h5>
                 </div>
 
             </div>
 
-            <div  style="width:40%;float: right;padding-top: 13px">
-                <div>
-                    <h4 style="font-weight: bold;font-size: 160%;">Paid Cash</h4>
-                    <input id = "money_given" style="position: fixed;font-family: Ubuntu; padding:10px;font-weight: bold;font-size: 120%;top: 71%;right:18.5%;height: 5%; width: 13%; border: 2px solid black; border-radius: 2px" placeholder="Enter amount">
-                    <button id = "cash_enter" onclick="viewCash()" style=" width: 5%; height: 3.75%;position: fixed; border: 2px solid black; border-radius: 2px; font-size: 130%;top: 71.5%;right:13%; font-family: Ubuntu Light; background: dimgrey; color: white">Enter</button>
+            <div  id="d2"  style="float: right; padding-top: 20px;padding-right: 100px" >
+                <div >
+                    <label style="font-weight: bold;font-size: 100%">Paid Cash</label>
+                    <input id = "money_given" type="text" onkeypress="restrict(event)" placeholder="Enter amount">
+                    <button id = "cash_enter" onclick="viewCash()" class="btn btn-primary" >Enter</button>
                 </div>
                 <br>
                 <div id="rcpt_foot3" >
-                    <h4 style="font-size: 160%"><b>Cash Change: TK 0</b></h4>
+                    <h5 style="font-size: 100%"><b>Cash Change: TK 0</b></h5>
 
             </div>
 
             </div>
 
         </div>
-
+    <div align="center">
+    <button onclick="submit()" type="submit" class="btn btn-primary" >Submit</button>
+        </div>
 
 
 </div>
+
 <!--inner block end here-->
 
 </div>
 </div>
 <!--slider menu-->
-    <div class="sidebar-menu">
+    <div class="sidebar-menu" style="height: 100%; overflow-y: auto; overflow-x: hidden; position: fixed; width:200px; z-index: 1; ">
 		  	<div class="logo"> <a href="#" class="sidebar-icon"> <span class="fa fa-bars"></span> </a> <a href="#"> <span id="logo" ></span>
 			      <!--<img id="logo" src="" alt="Logo"/>-->
 			  </a> </div>
 		    <div class="menu">
 		      <ul id="menu" >
-		       <li id="menu-home" ><a href="/home"><i class="fa fa-home"></i><span>Home</span></a></li>
-		         <li><a href="/notifications"><i class="fa fa-bell-o"></i><span>Notifications</span></a></li>
+		       <li id="menu-home" ><a href="/home"><i class="fa fa-tachometer"></i><span>Home</span></a></li>
+		         <li><a href="/notifications"><i class="fa fa glyphicon-asterisk"></i><span>Notifications</span></a></li>
 
-                  <li id="menu-comunicacao" ><a href="/medicines"><i class="fa fa-medkit"></i><span>Medicines</span><span class="fa fa-angle-right" style="float: right;"></span></a>
+                  <li id="menu-comunicacao" ><a href="/medicines"><i class="fa fa-book nav_icon"></i><span>Medicines</span><span class="fa fa-angle-right" style="float: right"></span></a>
 		          <ul id="menu-comunicacao-sub" >
 		            <li id="menu-mensagens" style="width: 120px" ><a href="/medicines">Medicine List</a>
 		            </li>
-		            <li id="menu-arquivos" ><a href='/medicineListModify'>Add Medicine</a></li>
+		            <li id="menu-arquivos" ><a href="typography.html">Add Medicine</a></li>
+		            <li id="menu-arquivos" ><a href="icons.html">Icons</a></li>
 		          </ul>
 		        </li>
-                <li><a href="/companies"><i class="fa fa-ambulance"></i><span>Medicine Companies</span><span class="fa fa-angle-right" style="float: right"></span></a>
+                <li><a href="#"><i class="fa fa glyphicon-pencil"></i><span>Medicine Companies</span><span class="fa fa-angle-right" style="float: right"></span></a>
 		          <ul>
 		            <li><a href="/companies">Company List</a></li>
 		            <li><a href="/addCompany">Register Company</a></li>
 		          </ul>
 		        </li>
 
-                  <li><a href="/orders"><i class="fa fa-suitcase"></i><span>Orders</span><span class="fa fa-angle-right" style="float: right"></span></a>
+                  <li><a href="#"><i class="fa fa glyphicon-pencil"></i><span>Orders</span><span class="fa fa-angle-right" style="float: right"></span></a>
 		          <ul>
 		            <li><a href="/orders">Order List</a></li>
 		            <li><a href="/orders/placeOrder">Place Order</a></li>
 		          </ul>
 		        </li>
-		          <li><a href="/makeReceipt"><i class="fa fa-calculator"></i><span>Make Receipt</span></a></li>
+		          <li><a href="/makeReceipt"><i class="fa fa-map-marker"></i><span>Make Receipt</span></a></li>
 
 		        </li>
 
-		        <li><a href="/finances"><i class="fa fa-dollar"></i><span>Finances</span></a></li>
-		        <li><a href="/accounts"><i class="fa fa-list-alt"></i><span>Manage Accounts</span></a></li>
-                  <li><a href="/aboutUs"><i class="fa fa-support"></i><span>About Us</span></a>
+		        <li><a href="/finances"><i class="fa fa-bar-chart"></i><span>Finances</span></a></li>
+		        <li><a href="/accounts"><i class="fa fa-bar-chart"></i><span>Manage Accounts</span></a></li>
+                  <li><a href="/aboutUs"><i class="fa fa-envelope"></i><span>About Us</span></a>
 
 		        </li>
 

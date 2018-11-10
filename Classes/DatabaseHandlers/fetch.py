@@ -39,7 +39,7 @@ def Fetch():
     users = session.query(Classes.DatabaseHandlers.create_table.Vendors).all()
     for user in users:
             m = str(user.vendor_id)
-            s = m + '#' + user.company_name + '#' + user.contact_number
+            s = m + '#' + str(user.company_name) + '#' + str(user.contact_number)
             vendorList.append(s)
     print(vendorList)
 
@@ -52,8 +52,8 @@ def Fetch():
 
     users = session.query(Classes.DatabaseHandlers.create_table.Notifications).all()
     for user in users:
-        m = str(user.notification_id)
-        s = m + '#' + user.notification + '#' + str(user.time)
+        m = str(user.notificationID)
+#        s = m + '#' + user.notification + '#' + str(user.time)
         notificationList.append(s)
     print(notificationList)
 

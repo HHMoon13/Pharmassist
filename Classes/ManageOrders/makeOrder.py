@@ -15,12 +15,17 @@ class makeOrder(object):
     orders = Order(1," ",0,0,0,"false",0,0)
     mediOrderList = []
     totalCost = 0
+    base = BaseOrder(orders)
+    decorator = base
 
     @staticmethod
     def setCompanyName(companyName):
         makeOrder.orders = Order(1,companyName,0,0,0,"false",0,0)
         makeOrder.mediOrderList = []
         makeOrder.totalCost = 0
+        makeOrder.base = BaseOrder(makeOrder.orders)
+        makeOrder.decorator = makeOrder.base
+
 
     @staticmethod
     def setTotalCost(cost):
@@ -30,10 +35,10 @@ class makeOrder(object):
     def addItem(data):
         m = medOrder(data['orderID'], data['order_id'], data['venID'], data['companyName'], data['medName'],data['qty'], data['dueDate'], data['status'], data['cost'])
         #print(m)
-        base = BaseOrder(makeOrder.orders)
-        decorator = DecoratorOrder(base,m)
+
+        makeOrder.decorator = DecoratorOrder(makeOrder.decorator,m)
         makeOrder.mediOrderList.append(m)
-        result = decorator.get_cost()
+        result = makeOrder.decorator.get_cost()
 
         makeOrder.totalCost = result
         makeOrder.setTotalCost(result)
@@ -57,10 +62,6 @@ class makeOrder(object):
         makeOrder.orders.status = "false"
         makeOrder.orders.orderDate = str(orderData['orderDate'])
         makeOrder.orders.dueDate = str(orderData['dueDate'])
-
-
-
-        #makeOrder.orders.companyName = str(orderData['companyName'])
         data = makeOrder.orders.stringData()
         print(data)
         a = Classes.DatabaseHandlers.addFactory
@@ -96,7 +97,7 @@ class makeOrder(object):
         due = float(orderData['due'])
         paid = float(orderData['paid'])
         print(paid)
-        if paid >= due:
+        if due == 0:
             paid = float(makeOrder.orders.totalCost)
         else:
             paid = float(makeOrder.orders.totalCost) - float(due)
@@ -114,7 +115,8 @@ class makeOrder(object):
 
         a = Iterator.Iterator
         a = AccessDatabaseOrdersList.AccessDatabaseOrdersList().getIterator()
-        a.update(orderID,'paid_amount',str(makeOrder.orders.paid))
         a.update(orderID, 'due_amount', str(makeOrder.orders.due))
+        a.update(orderID,'paid_amount',str(makeOrder.orders.paid))
+
         a.update(orderID,'status',orderData['status'])
 

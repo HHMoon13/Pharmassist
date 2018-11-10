@@ -239,22 +239,64 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
     <script type="text/javascript">
         vendorList = {{ vendorList|tojson }}
 
+
+        var start=1;
+        var counter=0;
+
         function showComp()
         {
             var table = document.getElementById("listbox");
-            for(var i=0;i<vendorList.length;i++)
+            for(var i=start;i<start+4;i++)
             {
-                comp = vendorList[i].split("#");
+                if(i>vendorList.length)break;
+                comp = vendorList[i-1].split("#");
                 var row = table.insertRow(-1);
-                var id = row.insertCell(0).innerHTML=comp[0];
-                var name = row.insertCell(1).innerHTML=comp[1];
-                var num = row.insertCell(2).innerHTML=comp[2];
+                row.insertCell(0).innerHTML=comp[0];
+                row.insertCell(1).innerHTML=comp[1];
+                row.insertCell(2).innerHTML=comp[2];
+                counter++;
             }
-        };
+        }
+
+        function left()
+        {
+            if(start-4<0)return;
+            var table = document.getElementById("listbox");
+            var rowCount = table.rows.length;
+            while(rowCount>1)
+            {
+                table.deleteRow(rowCount-1);
+                rowCount--;
+            }
+            start-=4;
+            document.getElementById("pageNum").innerHTML=(start)+" - "+(start+counter-1);
+            counter=0;
+            showComp();
+        }
+
+        function right()
+        {
+            if(start+4>=vendorList.length)return;
+            var table = document.getElementById("listbox");
+            var rowCount = table.rows.length;
+            while(rowCount>1)
+            {
+                table.deleteRow(rowCount-1);
+                rowCount--;
+            }
+            start+=4;
+            document.getElementById("pageNum").innerHTML=(start)+" - "+(start+counter-1);
+            counter=0;
+            showComp();
+        }
 
         window.onload = function WindowLoad(event)
         {
             showComp();
+            if(vendorList.length==0)document.getElementById("pageNum").innerHTML="0";
+            else if(vendorList.length>=4)document.getElementById("pageNum").innerHTML="1 - 4";
+            else
+                document.getElementById("pageNum").innerHTML="1 - "+vendorList.length;
         };
     </script>
 
@@ -356,19 +398,25 @@ $(".sidebar-icon").click(function() {
 <script src="static/js/bootstrap.js"> </script>
 <!-- mother grid end here-->
 
-    <div style="white-space: pre-line; position: fixed; top: 20%; left: 17%;
-     height: 70%; width: 80%; font-size: 150%; font-family: 'Ubuntu Light'; overflow: auto;">
-        <table id="listbox">
+    <p style="position: fixed; top: 15%; left: 45%; font-family: Ubuntu; font-size: 350%">Companies</p>
+
+    <div style="white-space: pre-line; position: fixed; top: 30%; left: 17%;
+     height: 70%; width: 80%; font-size: 200%; font-family: 'Ubuntu Light'; overflow: auto;">
+        <table id="listbox" style="position: fixed; left: 33%">
             <col style="width: 25%">
             <col style="width: 45%">
             <col style="width: 45%">
-            <tr>
+            <tr style="border-bottom: 2px solid black">
                 <th>ID</th>
                 <th>Name</th>
                 <th>Contact</th>
             </tr>
         </table>
     </div>
+
+    <button id="left" onclick="left()" style="position: fixed; left: 50%; bottom: 14%; font-family: Ubuntu; font-size: 150%; background: transparent; border-color: transparent"><</button>
+    <p id="pageNum" style="position: fixed; left: 55%; bottom: 14.7%; font-family: Ubuntu; font-size: 150%"></p>
+    <button id="right" onclick="right()" style="position: fixed; left: 61%; bottom: 14%; font-family: Ubuntu; font-size: 150%; background: transparent; border-color: transparent">></button>
 
 </body>
 </html>
