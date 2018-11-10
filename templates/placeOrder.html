@@ -536,29 +536,19 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                     document.getElementById("paid").value = document.getElementById("grandTotal").value;
                     document.getElementById("due").value = "0.00";
                     document.getElementById("exchange").value = "0.00";
-                    document.getElementById("paid").setAttribute("disabled",false);
+                    //document.getElementById("paid").setAttribute("disabled",false);
                 }
-                if(val == 3){
+                else if(val == 3){
                     document.getElementById("paid").value = "0.00";
                     document.getElementById("exchange").value = "0.00";
-                    document.getElementById("paid").value = document.getElementById("grandTotal").value;
-                    document.getElementById("paid").setAttribute("disabled",false);
+                    document.getElementById("due").value = document.getElementById("grandTotal").value;
+                    //document.getElementById("paid").setAttribute("disabled",false);
                 }
-                if(val == 2){
+                else if(val == 2){
                     document.getElementById("paid").removeAttribute("disabled");
                 }
 
-                var cName = this.options[this.selectedIndex].text;
-                obj = vendorList;
-                for (var i = 0; i < selectedMediList.length; i++) {
-                    medicine = (selectedMediList[i]);
 
-                    if (medicine.name == cName) {
-                        console.log(medicine.name)
-                        document.getElementById("rate").value = Number(medicine.price) * 0.8;
-                        document.getElementById("stock").value = medicine.qty;
-                    }
-                }
             }
         }
 
